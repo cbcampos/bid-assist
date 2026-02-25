@@ -277,13 +277,26 @@
         const API = '';
         let projects = [], rates = [], currentProject = null;
         
+        // 5B Contracting Sample Data
+        const sampleProjects = [
+            {id:1,name:"Eastdale Commons Shopping Center",client:"Coleman Development Group",address:"2800 Eastdale Circle, Montgomery, AL 36117",deadline:"2026-03-15",total:87500,status:"submitted",overhead:15,profit:12,line_items:[{category:"Excavation",description:"Building pad excavation",quantity:4500,unit_cost:4.5,markup:0},{category:"Excavation",description:"Storm drain trench",quantity:1200,unit_cost:5.5,markup:0},{category:"Backfill",description:"Backfill for utilities",quantity:2800,unit_cost:18,markup:0},{category:"Import Fill",description:"Select fill for parking area",quantity:3200,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess soil removal",quantity:1900,unit_cost:28,markup:0},{category:"Trench Box",description:"Trench safety rental",quantity:8,unit_cost:250,markup:0},{category:"Operator",description:"Operator - 3 crew members",quantity:40,unit_cost:65,markup:0}]},
+            {id:2,name:"Hillside Residential - Phase 2",client:"Southern Homes LLC",address:"4500 Hillside Dr, Montgomery, AL 36109",deadline:"2026-03-08",total:142000,status:"won",overhead:15,profit:15,line_items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:8500,unit_cost:4,markup:0},{category:"Excavation",description:"Street cut and grading",quantity:4200,unit_cost:4.2,markup:0},{category:"Backfill",description:"Utility trench backfill",quantity:5600,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway stone",quantity:1800,unit_cost:35,markup:0},{category:"Haul Off",description:"Debris and stumps",quantity:420,unit_cost:45,markup:0},{category:"Operator",description:"Equipment operators",quantity:85,unit_cost:65,markup:0},{category:"Final Grade",description:"Finish grading",quantity:2.5,unit_cost:2500,markup:0}]},
+            {id:3,name:"Downtown Montgomery Mixed-Use",client:"Capital City Developers",address:"125 Commerce Street, Montgomery, AL 36104",deadline:"2026-03-20",total:225000,status:"draft",overhead:18,profit:18,line_items:[{category:"Excavation",description:"Deep foundation excavation",quantity:6800,unit_cost:6.5,markup:0},{category:"Excavation",description:"Basement parking",quantity:4200,unit_cost:5.8,markup:0},{category:"Backfill",description:"Structural backfill",quantity:5200,unit_cost:22,markup:0},{category:"Import Fill",description:"CLSM",quantity:1200,unit_cost:65,markup:0},{category:"Haul Off",description:"Rock and excess soil",quantity:5800,unit_cost:32,markup:0},{category:"Trench Box",description:"Commercial trench box",quantity:15,unit_cost:350,markup:0},{category:"Operator",description:"Specialized operators",quantity:120,unit_cost:75,markup:0},{category:"Dewatering",description:"Well point system",quantity:1,unit_cost:8500,markup:0}]},
+            {id:4,name:"VA Hospital Parking Expansion",client:"US Dept of Veterans Affairs",address:"215 Perry Hill Rd, Montgomery, AL 36109",deadline:"2026-02-28",total:67500,status:"submitted",overhead:12,profit:8,line_items:[{category:"Excavation",description:"Asphalt removal",quantity:2800,unit_cost:2.5,markup:0},{category:"Excavation",description:"Gravel base excavation",quantity:1900,unit_cost:4.8,markup:0},{category:"Import Fill",description:"Crushed limestone base",quantity:2200,unit_cost:38,markup:0},{category:"Haul Off",description:"Asphalt and base",quantity:450,unit_cost:35,markup:0},{category:"Operator",description:"2 operators",quantity:32,unit_cost:65,markup:0}]},
+            {id:5,name:"River Region Medical Utility",client:"River Region Health System",address:"100 Medical Center Dr, Montgomery, AL 36117",deadline:"2026-02-20",total:45000,status:"lost",overhead:15,profit:10,line_items:[{category:"Excavation",description:"Water main trench",quantity:850,unit_cost:6.8,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:620,unit_cost:7.2,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:980,unit_cost:24,markup:0},{category:"Haul Off",description:"Material",quantity:490,unit_cost:28,markup:0},{category:"Operator",description:"Utility crew",quantity:28,unit_cost:70,markup:0}]},
+            {id:6,name:"AUM Site Prep",client:"Auburn University at Montgomery",address:"7400 Eastbrook Dr, Montgomery, AL 36117",deadline:"2026-04-01",total:185000,status:"submitted",overhead:15,profit:14,line_items:[{category:"Excavation",description:"Athletic fields",quantity:12500,unit_cost:4.2,markup:0},{category:"Excavation",description:"Parking lot subgrade",quantity:5800,unit_cost:4.5,markup:0},{category:"Backfill",description:"General backfill",quantity:8200,unit_cost:18,markup:0},{category:"Import Fill",description:"Athletic field mix",quantity:4500,unit_cost:42,markup:0},{category:"Haul Off",description:"Excess cut",quantity:6800,unit_cost:26,markup:0},{category:"Operator",description:"Full crew - 5 operators",quantity:95,unit_cost:68,markup:0},{category:"Final Grade",description:"Fine grade and seed prep",quantity:4.2,unit_cost:3200,markup:0}]},
+            {id:7,name:"Maxwell AFB - Building 805",client:"US Air Force / DCMA",address:"Maxwell AFB, Montgomery, AL 36112",deadline:"2026-03-10",total:38000,status:"won",overhead:15,profit:12,line_items:[{category:"Excavation",description:"HVAC unit pads",quantity:180,unit_cost:8.5,markup:0},{category:"Excavation",description:"Generator pad",quantity:85,unit_cost:9.2,markup:0},{category:"Backfill",description:"Utility backfill",quantity:320,unit_cost:22,markup:0},{category:"Concrete",description:"Pad forming and pour",quantity:12,unit_cost:850,markup:0},{category:"Operator",description:"Small crew",quantity:18,unit_cost:65,markup:0}]},
+            {id:8,name:"ASU Storm Drain",client:"Alabama State University",address:"915 Jackson St, Montgomery, AL 36104",deadline:"2026-03-25",total:92000,status:"draft",overhead:15,profit:12,line_items:[{category:"Excavation",description:"Storm drain trench",quantity:2400,unit_cost:6.2,markup:0},{category:"Excavation",description:"Inlet structures",quantity:18,unit_cost:450,markup:0},{category:"Backfill",description:"Trench backfill",quantity:1800,unit_cost:20,markup:0},{category:"Haul Off",description:"Excess soil",quantity:600,unit_cost:30,markup:0},{category:"Operator",description:"Utility crew",quantity:45,unit_cost:68,markup:0}]}
+        ];
+        
         // Load data
         async function loadProjects() {
             try {
                 const res = await fetch(API + '/api/projects');
                 const data = await res.json();
                 projects = data.data || [];
-            } catch(e) { projects = []; }
+                if (projects.length === 0) projects = sampleProjects;
+            } catch(e) { projects = sampleProjects; }
             renderProjects();
             renderStats();
         }
@@ -299,12 +312,24 @@
         }
         
         const defaultRates = [
-            {id:1,category:'Excavation',description:'Standard excavation',unit_cost:45,unit:'cu yd'},
-            {id:2,category:'Backfill',description:'Backfill native',unit_cost:18,unit:'cu yd'},
-            {id:3,category:'Import Fill',description:'Import select material',unit_cost:32,unit:'cu yd'},
-            {id:4,category:'Trench Box',description:'Rental + setup',unit_cost:250,unit:'day'},
-            {id:5,category:'Operator',description:'Equipment operator',unit_cost:65,unit:'hr'},
-            {id:6,category:'Haul Off',description:'Haul material offsite',unit_cost:28,unit:'cu yd'}
+            {id:1,category:'Excavation',description:'Standard cut (common soil)',unit_cost:4.50,unit:'cu yd'},
+            {id:2,category:'Excavation',description:'Rock excavation (requires blasting)',unit_cost:12.00,unit:'cu yd'},
+            {id:3,category:'Excavation',description:'Trench digging (utility lines)',unit_cost:6.50,unit:'LF'},
+            {id:4,category:'Excavation',description:'Grading cut',unit_cost:4.20,unit:'cu yd'},
+            {id:5,category:'Backfill',description:'Native backfill',unit_cost:18.00,unit:'cu yd'},
+            {id:6,category:'Backfill',description:'Select backfill (sand/gravel)',unit_cost:24.00,unit:'cu yd'},
+            {id:7,category:'Import Fill',description:'Select fill material delivered',unit_cost:32.00,unit:'cu yd'},
+            {id:8,category:'Import Fill',description:'Crushed limestone',unit_cost:38.00,unit:'cu yd'},
+            {id:9,category:'Import Fill',description:'Topsoil',unit_cost:28.00,unit:'cu yd'},
+            {id:10,category:'Haul Off',description:'Excess soil hauling',unit_cost:28.00,unit:'cu yd'},
+            {id:11,category:'Haul Off',description:'Rock hauling',unit_cost:35.00,unit:'cu yd'},
+            {id:12,category:'Trench Box',description:'Trench box rental/day',unit_cost:250.00,unit:'day'},
+            {id:13,category:'Operator',description:'Equipment operator',unit_cost:65.00,unit:'hr'},
+            {id:14,category:'Operator',description:'Skilled operator (excavator)',unit_cost:75.00,unit:'hr'},
+            {id:15,category:'Final Grade',description:'Finish grading/seed prep',unit_cost:3200.00,unit:'acre'},
+            {id:16,category:'Dewatering',description:'Well point system',unit_cost:8500.00,unit:'job'},
+            {id:17,category:'Concrete',description:'Concrete pad forming/pour',unit_cost:850.00,unit:'cu yd'},
+            {id:18,category:'Erosion Control',description:'Silt fence installation',unit_cost:2.50,unit:'LF'}
         ];
         
         // Render
