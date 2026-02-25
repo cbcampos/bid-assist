@@ -456,7 +456,7 @@
             try {
                 const res = await fetch(API + '/api/projects/' + currentProject.id);
                 const data = await res.json();
-                items = data.data?.line_items || [];
+                items = data.data?.line_items || currentProject.line_items || [];
             } catch(e) { items = []; }
             
             if (!items.length) {
