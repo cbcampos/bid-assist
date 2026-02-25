@@ -125,7 +125,28 @@
             .totals-grid { grid-template-columns: repeat(2, 1fr); }
             .line-item-row { grid-template-columns: 1fr; gap: 0.25rem; }
         }
-    </style>
+    
+        /* Print Styles */
+        @media print {
+            body { background: white; padding: 0; }
+            .header, .card, .stats, .btn, .modal-overlay { display: none !important; }
+            #print-area { display: block !important; }
+            .no-print { display: none; }
+        }
+        /* Print Area */
+        #print-area { display: none; padding: 40px; max-width: 800px; margin: 0 auto; }
+        .print-header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #1a5632; padding-bottom: 20px; }
+        .print-company { font-size: 28px; font-weight: bold; color: #1a5632; }
+        .print-title { font-size: 20px; margin-top: 10px; }
+        .print-info { margin: 20px 0; }
+        .print-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .print-table th, .print-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        .print-table th { background: #1a5632; color: white; }
+        .print-totals { margin-top: 20px; text-align: right; }
+        .print-total-row { padding: 5px 0; }
+        .print-grand-total { font-size: 24px; font-weight: bold; color: #1a5632; border-top: 2px solid #1a5632; padding-top: 10px; }
+        .print-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #666; }
+        </style>
 </head>
 <body>
     <div class="header">
@@ -197,7 +218,7 @@
             <div class="detail-actions">
                 <button class="btn btn-success btn-sm" onclick="updateStatus('won')">Mark Won</button>
                 <button class="btn btn-danger btn-sm" onclick="updateStatus('lost')">Mark Lost</button>
-                <button class="btn btn-secondary btn-sm" onclick="copyToClipboard()">Copy Bid</button>
+                <button class="btn btn-secondary btn-sm" onclick="copyToClipboard()">Copy Bid</button><button class="btn btn-primary btn-sm" onclick="printBid()">Print/PDF</button>
             </div>
         </div>
         
@@ -496,6 +517,24 @@
         }
         
         function copyToClipboard() {
+        
+        function printBid() {
+            if (!currentProject) return;
+            const items = currentProject.line_items || [];
+            let subtotal = 0;
+            let rows = items.map(item => {
+                const total = (item.quantity || 0) * (item.unit_cost || 0);
+                subtotal += total;
+                return `<tr><td>${item.category}</td><td>${item.description || ""}</td><td>${item.quantity}</td><td>$${item.unit_cost}</td><td style="text-align:right">$${total.toLocaleString()}</td></tr>`;
+            }).join("");
+            const overhead = currentProject.overhead || 0;
+            const profit = currentProject.profit || 0;
+            const overheadAmt = subtotal * overhead / 100;
+            const profitAmt = subtotal * profit / 100;
+            const total = subtotal + overheadAmt + profitAmt;
+            const html = `<html><head><title>Bid</title></head><body style="font-family:Arial;padding:40px;"><h1 style="color:#1a5632">5B CONTRACTING LLC</h1><h2>Bid: ${currentProject.name}</h2><p><strong>Client:</strong> ${currentProject.client}<br><strong>Address:</strong> ${currentProject.address || "N/A"}<br><strong>Date:</strong> ${new Date().toLocaleDateString()}</p><table border="1" style="border-collapse:collapse;width:100%"><tr style="background:#1a5632;color:white"><th>Category</th><th>Description</th><th>Qty</th><th>Unit Cost</th><th>Total</th></tr>${rows}</table><div style="margin-top:20px;text-align:right"><div>Subtotal: $${subtotal.toLocaleString()}</div><div>Overhead (${overhead}%): $${overheadAmt.toLocaleString()}</div><div>Profit (${profit}%): $${profitAmt.toLocaleString()}</div><div style="font-size:24px;font-weight:bold;color:#1a5632">TOTAL: $${total.toLocaleString()}</div></div></body></html>`;
+            const win = window.open("", "_blank"); win.document.write(html); win.document.close(); win.print();
+        }
             if (!currentProject) return;
             const text = `${currentProject.name}\nClient: ${currentProject.client}\n\nLine Items:\n${document.getElementById('lineItems').innerText}\n\nTotal: ${document.getElementById('total-final').textContent}`;
             navigator.clipboard.writeText(text);
