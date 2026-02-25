@@ -385,7 +385,95 @@
             </div>
         </div>
 
-    </main>
+    
+        <!-- VIEW: LEADS -->
+        <div id="view-leads" class="fade-in hidden">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Company</th><th class="px-6 py-4">Contact</th><th class="px-6 py-4">Source</th><th class="px-6 py-4 text-right">Value</th><th class="px-6 py-4">Status</th></tr></thead><tbody id="leads-body" class="text-sm"></tbody></table>
+            </div>
+        </div>
+
+        <!-- VIEW: INVOICES -->
+        <div id="view-invoices" class="fade-in hidden">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Invoice #</th><th class="px-6 py-4">Client</th><th class="px-6 py-4 text-right">Amount</th><th class="px-6 py-4">Status</th><th class="px-6 py-4">Due Date</th></tr></thead><tbody id="invoices-body" class="text-sm"></tbody></table>
+            </div>
+        </div>
+
+        <!-- VIEW: 811 TICKETS -->
+        <div id="view-811" class="fade-in hidden">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Ticket #</th><th class="px-6 py-4">Location</th><th class="px-6 py-4">Status</th><th class="px-6 py-4">Expires</th></tr></thead><tbody id="tickets-body" class="text-sm"></tbody></table>
+            </div>
+        </div>
+
+        <!-- VIEW: CHANGE ORDERS -->
+        <div id="view-change-orders" class="fade-in hidden">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Project</th><th class="px-6 py-4">Description</th><th class="px-6 py-4 text-right">Amount</th><th class="px-6 py-4">Status</th></tr></thead><tbody id="co-body" class="text-sm"></tbody></table>
+            </div>
+        </div>
+
+        <!-- VIEW: SUBCONTRACTORS -->
+        <div id="view-subs" class="fade-in hidden">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Company</th><th class="px-6 py-4">Trade</th><th class="px-6 py-4">Contact</th><th class="px-6 py-4">Status</th></tr></thead><tbody id="subs-body" class="text-sm"></tbody></table>
+            </div>
+        </div>
+
+        <!-- VIEW: SAFETY -->
+        <div id="view-safety" class="fade-in hidden">
+            <div class="grid grid-cols-3 gap-6 mb-6">
+                <div class="bg-white p-6 rounded-xl border shadow-sm"><h3 class="text-gray-500 text-sm">Incidents (YTD)</h3><p class="text-3xl font-bold mt-2">0</p></div>
+                <div class="bg-white p-6 rounded-xl border shadow-sm"><h3 class="text-gray-500 text-sm">Safety Meetings</h3><p class="text-3xl font-bold mt-2">12</p></div>
+                <div class="bg-white p-6 rounded-xl border shadow-sm"><h3 class="text-gray-500 text-sm">Days Without Incident</h3><p class="text-3xl font-bold mt-2 text-green-600">45</p></div>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Date</th><th class="px-6 py-4">Type</th><th class="px-6 py-4">Location</th><th class="px-6 py-4">Status</th></tr></thead><tbody class="text-sm"><tr><td colspan="4" class="p-4 text-center text-gray-500">No incidents recorded</td></tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- VIEW: LICENSING -->
+        <div id="view-licensing" class="fade-in hidden">
+            <div class="grid grid-cols-3 gap-6 mb-6">
+                <div class="bg-white p-6 rounded-xl border shadow-sm border-t-4 border-t-green-500"><h3 class="text-gray-500 text-sm">Business License</h3><p class="text-2xl font-bold mt-2">Active</p><p class="text-sm text-gray-500 mt-1">Expires: Dec 2026</p></div>
+                <div class="bg-white p-6 rounded-xl border shadow-sm border-t-4 border-t-green-500"><h3 class="text-gray-500 text-sm">General Liability</h3><p class="text-2xl font-bold mt-2">$2M</p><p class="text-sm text-gray-500 mt-1">Expires: Jun 2026</p></div>
+                <div class="bg-white p-6 rounded-xl border shadow-sm border-t-4 border-t-yellow-500"><h3 class="text-gray-500 text-sm">Equipment Policy</h3><p class="text-2xl font-bold mt-2">$500K</p><p class="text-sm text-gray-500 mt-1">Expires: Mar 2026</p></div>
+            </div>
+        </div>
+
+        <!-- VIEW: TEAM -->
+        <div id="view-team" class="fade-in hidden">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Name</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Status</th></tr></thead><tbody class="text-sm"><tr><td class="px-6 py-4 font-bold">Ralph (Owner)</td><td class="px-6 py-4">Owner</td><td class="px-6 py-4">ralph@5bcontracting.com</td><td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-bold">Active</span></td></tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- VIEW: FIELD REPORTS -->
+        <div id="view-field-reports" class="fade-in hidden">
+            <div class="grid grid-cols-3 gap-6 mb-6">
+                <div class="bg-white p-6 rounded-xl border shadow-sm"><h3 class="text-gray-500 text-sm">Today's Reports</h3><p class="text-3xl font-bold mt-2">2</p></div>
+                <div class="bg-white p-6 rounded-xl border shadow-sm"><h3 class="text-gray-500 text-sm">This Week</h3><p class="text-3xl font-bold mt-2">8</p></div>
+                <div class="bg-white p-6 rounded-xl border shadow-sm"><h3 class="text-gray-500 text-sm">Total Hours</h3><p class="text-3xl font-bold mt-2">156</p></div>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Date</th><th class="px-6 py-4">Project</th><th class="px-6 py-4">Crew</th><th class="px-6 py-4">Hours</th><th class="px-6 py-4">Notes</th></tr></thead><tbody id="fr-body" class="text-sm"></tbody></table>
+            </div>
+        </div>
+
+        <!-- VIEW: WEATHER -->
+        <div id="view-weather" class="fade-in hidden">
+            <div class="grid grid-cols-5 gap-4 mb-6">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl"><p class="text-sm opacity-90">Today</p><p class="text-4xl font-bold mt-2">72°</p><p class="text-sm opacity-90">Sunny</p></div>
+                <div class="bg-white p-6 rounded-xl border"><p class="text-gray-500 text-sm">Tomorrow</p><p class="text-3xl font-bold mt-2">68°</p><p class="text-sm text-gray-500">Partly Cloudy</p></div>
+                <div class="bg-white p-6 rounded-xl border border-red-300"><p class="text-red-500 text-sm">Wed</p><p class="text-3xl font-bold mt-2">45°</p><p class="text-sm text-red-500 font-bold">80% Rain</p></div>
+                <div class="bg-white p-6 rounded-xl border"><p class="text-gray-500 text-sm">Thu</p><p class="text-3xl font-bold mt-2">52°</p><p class="text-sm text-gray-500">30% Rain</p></div>
+                <div class="bg-white p-6 rounded-xl border"><p class="text-gray-500 text-sm">Fri</p><p class="text-3xl font-bold mt-2">58°</p><p class="text-sm text-gray-500">Sunny</p></div>
+            </div>
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6"><p class="font-bold text-yellow-800"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Rain expected Wednesday - Consider delaying concrete pours</p></div>
+        </div>
+
+</main>
 
     <!-- JavaScript Logic -->
     <script>
@@ -431,7 +519,7 @@
         // ==========================================
         // 2. VIEW SWITCHING LOGIC
         // ==========================================
-        const views =['dashboard', 'bid-editor', 'clients', 'rate-card', 'job-costing', 'equipment', 'portal'];
+        const views =['dashboard', 'bid-editor', 'clients', 'rate-card', 'job-costing', 'equipment', 'portal', 'leads', 'invoices', '811', 'change-orders', 'subs', 'safety', 'licensing', 'team', 'field-reports', 'weather'];
         
         function switchView(viewName) {
             // Hide all
@@ -460,7 +548,17 @@
                 'rate-card': { t: 'Rate Card', s: 'Standard pricing for estimating.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg hover:bg-brand-dark shadow-sm"><i class="fa-solid fa-tag mr-2"></i>Add Rate</button>' },
                 'job-costing': { t: 'Job Costing (WIP)', s: 'Track estimated vs actual costs in real-time.', a: '<button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50"><i class="fa-solid fa-file-csv mr-2"></i>Export CSV</button>' },
                 'equipment': { t: 'Equipment Fleet', s: 'Track machine locations, hours, and maintenance.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg hover:bg-brand-dark shadow-sm"><i class="fa-solid fa-plus mr-2"></i>Add Machine</button>' },
-                'portal': { t: 'Client Portals', s: 'Manage external access links for your clients.', a: '' }
+                'portal': { t: 'Client Portals', s: 'Manage external access links for your clients.', a: '' },
+                'leads': { t: 'Leads', s: 'Track prospects to bids.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg"><i class="fa-solid fa-plus mr-2"></i>Add Lead</button>' },
+                'invoices': { t: 'Invoices', s: 'Create and track invoices.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg"><i class="fa-solid fa-plus mr-2"></i>New Invoice</button>' },
+                '811': { t: '811 Tickets', s: 'One-Call ticket tracking.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg"><i class="fa-solid fa-plus mr-2"></i>New Ticket</button>' },
+                'change-orders': { t: 'Change Orders', s: 'Scope change management.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg"><i class="fa-solid fa-plus mr-2"></i>New CO</button>' },
+                'subs': { t: 'Subcontractors', s: 'Sub database & availability.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg"><i class="fa-solid fa-plus mr-2"></i>Add Sub</button>' },
+                'safety': { t: 'Safety', s: 'OSHA compliance & incidents.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg"><i class="fa-solid fa-plus mr-2"></i>Report Incident</button>' },
+                'licensing': { t: 'Licensing', s: 'Permits & insurance.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg"><i class="fa-solid fa-plus mr-2"></i>Add License</button>' },
+                'team': { t: 'Team', s: 'Manage users & roles.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg"><i class="fa-solid fa-user-plus mr-2"></i>Add User</button>' },
+                'field-reports': { t: 'Field Reports', s: 'Daily field updates.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg"><i class="fa-solid fa-plus mr-2"></i>New Report</button>' },
+                'weather': { t: 'Weather', s: 'Job site forecasts.', a: '' }
             };
 
             title.innerText = headers[viewName].t;
@@ -678,6 +776,101 @@ function loadBid(id) {
     document.getElementById('grand-total-val').innerText = '$'+(subtotal*1.15).toLocaleString();
 }
 
+
+// Leads Data
+const leadsData = [
+    {company:"Metro Properties",contact:"Tom Baker",source:"Referral",value:85000,status:"Hot"},
+    {company:"City of Montgomery",contact:"Sarah Wilson",source:"Bid List",value:120000,status:"Warm"},
+    {company:"Auburn University",contact:"Mike Brown",source:"Website",value:95000,status:"New"},
+    {company:"Alabama Power",contact:"Jane Smith",source:"Cold Call",value:200000,status:"Warm"}
+];
+
+// Invoices Data
+const invoicesData = [
+    {id:"INV-001",client:"Coleman Development",amount:87500,status:"Sent",due:"2026-03-15"},
+    {id:"INV-002",client:"Southern Homes",amount:142000,status:"Paid",due:"2026-02-28"},
+    {id:"INV-003",client:"Apex Development",amount:45000,status:"Draft",due:"2026-04-01"}
+];
+
+// 811 Tickets Data
+const ticketsData = [
+    {id:"811-2026-001",location:"2800 Eastdale Circle",status:"Active",expires:"2026-03-01"},
+    {id:"811-2026-002",location:"1500 Hillside Dr",status:"Complete",expires:"2026-02-15"}
+];
+
+// Change Orders Data
+const changeOrdersData = [
+    {project:"Highland Subdivision",desc:"Additional grading - east lot",amount:8500,status:"Pending"},
+    {project:"Eastdale Commons",desc:"Added drainage pipe",amount:3200,status:"Approved"}
+];
+
+// Subcontractors Data
+const subsData = [
+    {company:"Alabama Concrete LLC",trade:"Concrete",contact:"Mike Jones",status:"Available"},
+    {company:"Gulf Coast Utilities",trade:"Electrical",contact:"Sam Wilson",status:"Busy"},
+    {company:"Delta Plumbing",trade:"Plumbing",contact:"John Delta",status:"Available"}
+];
+
+// Field Reports Data
+const fieldReportsData = [
+    {date:"2026-02-25",project:"Highland Subdivision",crew:4,hours:8,notes:"Completed grading for lots 5-8"},
+    {date:"2026-02-24",project:"Eastdale Commons",crew:3,hours:7,notes:"Weather delay - rain"}
+];
+
+// Render functions
+function renderLeads() {
+    let html = '';
+    leadsData.forEach(l => {
+        const statusClass = l.status === 'Hot' ? 'bg-red-100 text-red-800' : l.status === 'Warm' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800';
+        html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-bold">'+l.company+'</td><td class="px-6 py-4">'+l.contact+'</td><td class="px-6 py-4">'+l.source+'</td><td class="px-6 py-4 text-right">$'+l.value.toLocaleString()+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+l.status+'</span></td></tr>';
+    });
+    document.getElementById('leads-body').innerHTML = html;
+}
+
+function renderInvoices() {
+    let html = '';
+    invoicesData.forEach(i => {
+        const statusClass = i.status === 'Paid' ? 'bg-green-100 text-green-800' : i.status === 'Sent' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800';
+        html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-mono">'+i.id+'</td><td class="px-6 py-4 font-bold">'+i.client+'</td><td class="px-6 py-4 text-right">$'+i.amount.toLocaleString()+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+i.status+'</span></td><td class="px-6 py-4">'+i.due+'</td></tr>';
+    });
+    document.getElementById('invoices-body').innerHTML = html;
+}
+
+function renderTickets() {
+    let html = '';
+    ticketsData.forEach(t => {
+        const statusClass = t.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+        html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-mono">'+t.id+'</td><td class="px-6 py-4">'+t.location+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+t.status+'</span></td><td class="px-6 py-4">'+t.expires+'</td></tr>';
+    });
+    document.getElementById('tickets-body').innerHTML = html;
+}
+
+function renderChangeOrders() {
+    let html = '';
+    changeOrdersData.forEach(c => {
+        const statusClass = c.status === 'Approved' ? 'bg-green-100 text-green-800' : c.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800';
+        html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-bold">'+c.project+'</td><td class="px-6 py-4">'+c.desc+'</td><td class="px-6 py-4 text-right">$'+c.amount.toLocaleString()+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+c.status+'</span></td></tr>';
+    });
+    document.getElementById('co-body').innerHTML = html;
+}
+
+function renderSubs() {
+    let html = '';
+    subsData.forEach(s => {
+        const statusClass = s.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+        html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-bold">'+s.company+'</td><td class="px-6 py-4">'+s.trade+'</td><td class="px-6 py-4">'+s.contact+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+s.status+'</span></td></tr>';
+    });
+    document.getElementById('subs-body').innerHTML = html;
+}
+
+function renderFieldReports() {
+    let html = '';
+    fieldReportsData.forEach(f => {
+        html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4">'+f.date+'</td><td class="px-6 py-4 font-bold">'+f.project+'</td><td class="px-6 py-4">'+f.crew+'</td><td class="px-6 py-4">'+f.hours+'</td><td class="px-6 py-4 text-sm">'+f.notes+'</td></tr>';
+    });
+    document.getElementById('fr-body').innerHTML = html;
+}
+
 // Initialize Everything on Load
         window.onload = () => {
             renderLineItems();
@@ -686,6 +879,12 @@ function loadBid(id) {
             renderJobCosting();
             renderEquipment();
             renderPortals();
+            renderLeads();
+            renderInvoices();
+            renderTickets();
+            renderChangeOrders();
+            renderSubs();
+            renderFieldReports();
             initCharts();
         };
     </script>
