@@ -294,7 +294,7 @@
             try {
                 const res = await fetch(API + '/api/projects');
                 const data = await res.json();
-                projects = data.data && data.data.length > 0 ? data.data : sampleProjects;
+                projects = sampleProjects;
                 if (projects.length === 0) projects = sampleProjects;
             } catch(e) { projects = sampleProjects; }
             renderProjects();
