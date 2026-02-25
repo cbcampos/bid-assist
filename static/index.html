@@ -256,7 +256,7 @@
                     <div class="form-group"><label class="form-label">Overhead %</label><input type="number" class="form-input" name="overhead" value="15" min="0"></div>
                     <div class="form-group"><label class="form-label">Profit %</label><input type="number" class="form-input" name="profit" value="10" min="0"></div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width:100%">Create Project</button>
+                <button type="submit" class="btn btn-primary" style="width:100%">Create Project</button><button class="btn btn-secondary" onclick="showTemplates()">Load Template</button>
             </form>
         </div>
     </div>
@@ -300,6 +300,12 @@
         
         // 5B Contracting Sample Data
         const sampleProjects = [
+        
+        const projectTemplates = [
+            {id:"residential",name:"Residential Site Work",overhead:15,profit:15,items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:5000,unit_cost:4,markup:0},{category:"Excavation",description:"Foundation excavation",quantity:800,unit_cost:5.5,markup:0},{category:"Backfill",description:"Foundation backfill",quantity:400,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway base",quantity:300,unit_cost:35,markup:0},{category:"Final Grade",description:"Finish grading",quantity:1,unit_cost:2500,markup:0}]},
+            {id:"commercial",name:"Commercial Site Work",overhead:18,profit:18,items:[{category:"Excavation",description:"Building pad",quantity:15000,unit_cost:4.5,markup:0},{category:"Excavation",description:"Parking lot",quantity:8000,unit_cost:4,markup:0},{category:"Backfill",description:"Structural backfill",quantity:6000,unit_cost:22,markup:0},{category:"Import Fill",description:"Select fill",quantity:5000,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess material",quantity:8000,unit_cost:28,markup:0},{category:"Final Grade",description:"Athletic field",quantity:3,unit_cost:3000,markup:0}]},
+            {id:"utility",name:"Utility Line Installation",overhead:15,profit:12,items:[{category:"Excavation",description:"Water main trench",quantity:1000,unit_cost:6.5,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:800,unit_cost:7,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:1200,unit_cost:24,markup:0},{category:"Trench Box",description:"Trench safety",quantity:10,unit_cost:250,markup:0},{category:"Operator",description:"Utility crew",quantity:40,unit_cost:70,markup:0}]}
+        ];
             {id:1,name:"Eastdale Commons Shopping Center",client:"Coleman Development Group",address:"2800 Eastdale Circle, Montgomery, AL 36117",deadline:"2026-03-15",total:87500,status:"submitted",overhead:15,profit:12,line_items:[{category:"Excavation",description:"Building pad excavation",quantity:4500,unit_cost:4.5,markup:0},{category:"Excavation",description:"Storm drain trench",quantity:1200,unit_cost:5.5,markup:0},{category:"Backfill",description:"Backfill for utilities",quantity:2800,unit_cost:18,markup:0},{category:"Import Fill",description:"Select fill for parking area",quantity:3200,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess soil removal",quantity:1900,unit_cost:28,markup:0},{category:"Trench Box",description:"Trench safety rental",quantity:8,unit_cost:250,markup:0},{category:"Operator",description:"Operator - 3 crew members",quantity:40,unit_cost:65,markup:0}]},
             {id:2,name:"Hillside Residential - Phase 2",client:"Southern Homes LLC",address:"4500 Hillside Dr, Montgomery, AL 36109",deadline:"2026-03-08",total:142000,status:"won",overhead:15,profit:15,line_items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:8500,unit_cost:4,markup:0},{category:"Excavation",description:"Street cut and grading",quantity:4200,unit_cost:4.2,markup:0},{category:"Backfill",description:"Utility trench backfill",quantity:5600,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway stone",quantity:1800,unit_cost:35,markup:0},{category:"Haul Off",description:"Debris and stumps",quantity:420,unit_cost:45,markup:0},{category:"Operator",description:"Equipment operators",quantity:85,unit_cost:65,markup:0},{category:"Final Grade",description:"Finish grading",quantity:2.5,unit_cost:2500,markup:0}]},
             {id:3,name:"Downtown Montgomery Mixed-Use",client:"Capital City Developers",address:"125 Commerce Street, Montgomery, AL 36104",deadline:"2026-03-20",total:225000,status:"draft",overhead:18,profit:18,line_items:[{category:"Excavation",description:"Deep foundation excavation",quantity:6800,unit_cost:6.5,markup:0},{category:"Excavation",description:"Basement parking",quantity:4200,unit_cost:5.8,markup:0},{category:"Backfill",description:"Structural backfill",quantity:5200,unit_cost:22,markup:0},{category:"Import Fill",description:"CLSM",quantity:1200,unit_cost:65,markup:0},{category:"Haul Off",description:"Rock and excess soil",quantity:5800,unit_cost:32,markup:0},{category:"Trench Box",description:"Commercial trench box",quantity:15,unit_cost:350,markup:0},{category:"Operator",description:"Specialized operators",quantity:120,unit_cost:75,markup:0},{category:"Dewatering",description:"Well point system",quantity:1,unit_cost:8500,markup:0}]},
@@ -316,8 +322,26 @@
                 const res = await fetch(API + '/api/projects');
                 const data = await res.json();
                 projects = sampleProjects;
+        
+        const projectTemplates = [
+            {id:"residential",name:"Residential Site Work",overhead:15,profit:15,items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:5000,unit_cost:4,markup:0},{category:"Excavation",description:"Foundation excavation",quantity:800,unit_cost:5.5,markup:0},{category:"Backfill",description:"Foundation backfill",quantity:400,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway base",quantity:300,unit_cost:35,markup:0},{category:"Final Grade",description:"Finish grading",quantity:1,unit_cost:2500,markup:0}]},
+            {id:"commercial",name:"Commercial Site Work",overhead:18,profit:18,items:[{category:"Excavation",description:"Building pad",quantity:15000,unit_cost:4.5,markup:0},{category:"Excavation",description:"Parking lot",quantity:8000,unit_cost:4,markup:0},{category:"Backfill",description:"Structural backfill",quantity:6000,unit_cost:22,markup:0},{category:"Import Fill",description:"Select fill",quantity:5000,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess material",quantity:8000,unit_cost:28,markup:0},{category:"Final Grade",description:"Athletic field",quantity:3,unit_cost:3000,markup:0}]},
+            {id:"utility",name:"Utility Line Installation",overhead:15,profit:12,items:[{category:"Excavation",description:"Water main trench",quantity:1000,unit_cost:6.5,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:800,unit_cost:7,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:1200,unit_cost:24,markup:0},{category:"Trench Box",description:"Trench safety",quantity:10,unit_cost:250,markup:0},{category:"Operator",description:"Utility crew",quantity:40,unit_cost:70,markup:0}]}
+        ];
                 if (projects.length === 0) projects = sampleProjects;
+        
+        const projectTemplates = [
+            {id:"residential",name:"Residential Site Work",overhead:15,profit:15,items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:5000,unit_cost:4,markup:0},{category:"Excavation",description:"Foundation excavation",quantity:800,unit_cost:5.5,markup:0},{category:"Backfill",description:"Foundation backfill",quantity:400,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway base",quantity:300,unit_cost:35,markup:0},{category:"Final Grade",description:"Finish grading",quantity:1,unit_cost:2500,markup:0}]},
+            {id:"commercial",name:"Commercial Site Work",overhead:18,profit:18,items:[{category:"Excavation",description:"Building pad",quantity:15000,unit_cost:4.5,markup:0},{category:"Excavation",description:"Parking lot",quantity:8000,unit_cost:4,markup:0},{category:"Backfill",description:"Structural backfill",quantity:6000,unit_cost:22,markup:0},{category:"Import Fill",description:"Select fill",quantity:5000,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess material",quantity:8000,unit_cost:28,markup:0},{category:"Final Grade",description:"Athletic field",quantity:3,unit_cost:3000,markup:0}]},
+            {id:"utility",name:"Utility Line Installation",overhead:15,profit:12,items:[{category:"Excavation",description:"Water main trench",quantity:1000,unit_cost:6.5,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:800,unit_cost:7,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:1200,unit_cost:24,markup:0},{category:"Trench Box",description:"Trench safety",quantity:10,unit_cost:250,markup:0},{category:"Operator",description:"Utility crew",quantity:40,unit_cost:70,markup:0}]}
+        ];
             } catch(e) { projects = sampleProjects; }
+        
+        const projectTemplates = [
+            {id:"residential",name:"Residential Site Work",overhead:15,profit:15,items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:5000,unit_cost:4,markup:0},{category:"Excavation",description:"Foundation excavation",quantity:800,unit_cost:5.5,markup:0},{category:"Backfill",description:"Foundation backfill",quantity:400,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway base",quantity:300,unit_cost:35,markup:0},{category:"Final Grade",description:"Finish grading",quantity:1,unit_cost:2500,markup:0}]},
+            {id:"commercial",name:"Commercial Site Work",overhead:18,profit:18,items:[{category:"Excavation",description:"Building pad",quantity:15000,unit_cost:4.5,markup:0},{category:"Excavation",description:"Parking lot",quantity:8000,unit_cost:4,markup:0},{category:"Backfill",description:"Structural backfill",quantity:6000,unit_cost:22,markup:0},{category:"Import Fill",description:"Select fill",quantity:5000,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess material",quantity:8000,unit_cost:28,markup:0},{category:"Final Grade",description:"Athletic field",quantity:3,unit_cost:3000,markup:0}]},
+            {id:"utility",name:"Utility Line Installation",overhead:15,profit:12,items:[{category:"Excavation",description:"Water main trench",quantity:1000,unit_cost:6.5,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:800,unit_cost:7,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:1200,unit_cost:24,markup:0},{category:"Trench Box",description:"Trench safety",quantity:10,unit_cost:250,markup:0},{category:"Operator",description:"Utility crew",quantity:40,unit_cost:70,markup:0}]}
+        ];
             renderProjects();
             renderStats();
         }
@@ -441,6 +465,13 @@
         
         // Project
         function showNewProject() { document.getElementById('project-modal').style.display = 'flex'; }
+        
+        function showTemplates() {
+            const templateList = document.getElementById("templateList");
+            if (templateList) {
+                document.getElementById("project-modal").style.display = "flex";
+            }
+        }
         
         document.getElementById('projectForm').addEventListener('submit', async e => {
             e.preventDefault();
