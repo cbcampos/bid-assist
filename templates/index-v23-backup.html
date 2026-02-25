@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BidAssist - 5B Contracting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a5632; --surface: #fff; --bg: #f5f7f6; --text: #1a1a1a; --text2: #5a6a6a; --border: #e0e8e5; --success: #22c55e; --warning: #f59e0b; --danger: #ef4444; --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        .header { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; }
+        .header h1 { font-size: 1.5rem; }
+        .nav { display: flex; gap: 1rem; }
+        .nav button { background: none; border: none; color: white; cursor: pointer; opacity: 0.8; font-size: 0.9rem; }
+        .nav button:hover, .nav button.active { opacity: 1; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .stat-card { background: var(--surface); padding: 1rem; border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.75rem; color: var(--text2); margin-top: 0.25rem; }
+        .card { background: var(--surface); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .card-header { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+        .card-title { font-weight: 600; }
+        .btn { padding: 0.5rem 1rem; border-radius: 8px; border: none; font-weight: 500; cursor: pointer; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: var(--surface); border: 1px solid var(--border); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .project-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; cursor: pointer; transition: 0.2s; }
+        .project-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .project-name { font-weight: 600; font-size: 1rem; }
+        .project-client { color: var(--text2); font-size: 0.85rem; }
+        .project-meta { display: flex; justify-content: space-between; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+        .project-total { font-weight: 700; color: var(--primary); }
+        .badge { padding: 0.2rem 0.5rem; border-radius: 20px; font-size: 0.7rem; font-weight: 500; }
+        .badge-draft { background: #fef3c7; color: #92400e; }
+        .badge-submitted { background: #dbeafe; color: #1e40af; }
+        .badge-won { background: #dcfce7; color: #166534; }
+        .badge-lost { background: #fee2e2; color: #991b1b; }
+        .form-group { margin-bottom: 0.75rem; }
+        .form-label { display: block; font-weight: 500; margin-bottom: 0.3rem; font-size: 0.85rem; }
+        .form-input { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal { background: white; padding: 1.5rem; border-radius: var(--radius); max-width: 500px; width: 95%; }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+        .detail-header { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
+        .detail-title { font-size: 1.5rem; font-weight: 700; }
+        .detail-client { color: var(--text2); }
+        .totals-card { background: linear-gradient(135deg, var(--primary) 0%, #007580 100%); color: white; padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem; }
+        .totals-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1rem; }
+        .total-item { text-align: center; }
+        .total-label { font-size: 0.75rem; opacity: 0.9; }
+        .total-value { font-size: 1.25rem; font-weight: 700; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.6rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        th { font-weight: 600; color: var(--text2); font-size: 0.75rem; }
+        .text-right { text-align: right; }
+        .empty { text-align: center; padding: 2rem; color: var(--text2); }
+        .history-stat { text-align: center; padding: 1rem; background: var(--surface); border-radius: var(--radius); }
+        .history-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .hidden { display: none; }
+        @media (max-width: 768px) { .stats { grid-template-columns: repeat(2, 1fr); } .form-row { grid-template-columns: 1fr; } .grid { grid-template-columns: 1fr; } .totals-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+<script src="https://cdn.tailwindcss.com">
+        let invoices = [{id:"INV-001",client:"Coleman Development",amount:87500,status:"Sent",due:"2026-03-15"},{id:"INV-002",client:"Southern Homes",amount:142000,status:"Paid",due:"2026-02-28"}];
+        let rates = [{id:1,category:"Excavation",description:"Standard cut",unit_cost:4.50,unit:"cu yd"},{id:2,category:"Equipment",description:"CAT 320",unit_cost:450,unit:"day"},{id:3,category:"Operator",description:"Operator",unit_cost:65,unit:"hr"}];
+        let equipment = [{id:"EQ-001",name:"CAT 320 Excavator",type:"Excavator",status:"Active",location:"Yard",hours:4520},{id:"EQ-002",name:"John Deere Loader",type:"Loader",status:"Active",location:"Job",hours:3200}];
+        let tickets = [{id:"811-001",location:"2800 Eastdale Circle",status:"Active",expires:"2026-03-01"}];
+        let changeOrders = [{project:"Eastdale Commons",desc:"Additional grading",amount:8500,status:"Pending"}];
+        let subs = [{company:"Alabama Concrete",trade:"Concrete",contact:"Mike Jones",status:"Available"}];
+        let fieldReports = [{id:"FR-001",date:"2026-02-25",project:"Eastdale",crew:4,hours:8,notes:"Done",issues:0}];
+        let jobCosting = [{project:"Eastdale Commons",estimated:87500,actual:82000,status:"Under"},{project:"Hillside Residential",estimated:142000,actual:138500,status:"Under"}];
+
+    
+        let currentFormType = "";
+        let currentEditId = null;
+        let currentCollection = null;
+        
+        const fields = {
+            bid: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Project Name</label><input name='name' placeholder='e.g. Eastdale Shopping Center' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Client</label><input name='client' placeholder='Client company' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Deadline</label><input name='deadline' type='date' class='w-full p-2 border rounded' required></div></div>",
+            lead: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Company</label><input name='company' placeholder='Company name' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Contact</label><input name='contact' placeholder='Contact name' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Value ($)</label><input name='value' type='number' placeholder='50000' class='w-full p-2 border rounded'></div></div>",
+            invoice: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Client</label><input name='client' placeholder='Client name' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Amount ($)</label><input name='amount' type='number' placeholder='0' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Due Date</label><input name='due' type='date' class='w-full p-2 border rounded' required></div></div>",
+            client: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Company</label><input name='company' placeholder='Company name' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Contact</label><input name='contact' placeholder='Contact name' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Email</label><input name='email' type='email' placeholder='email@company.com' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Phone</label><input name='phone' placeholder='(334) 555-0100' class='w-full p-2 border rounded'></div></div>",
+            rate: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Category</label><input name='category' placeholder='e.g. Excavation' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Description</label><input name='description' placeholder='Description of work' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Unit Cost ($)</label><input name='unit_cost' type='number' placeholder='0.00' step='0.01' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Unit</label><input name='unit' placeholder='cu yd, hr, day' class='w-full p-2 border rounded'></div></div>",
+            equipment: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Equipment Name</label><input name='name' placeholder='e.g. CAT 320 Excavator' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Type</label><select name='type' class='w-full p-2 border rounded'><option>Excavator</option><option>Loader</option><option>Dozer</option><option>Truck</option></select></div><div><label class='block text-sm font-medium mb-1'>Status</label><select name='status' class='w-full p-2 border rounded'><option>Active</option><option>Maintenance</option></select></div><div><label class='block text-sm font-medium mb-1'>Location</label><input name='location' placeholder='Yard, Shop, Job Site' class='w-full p-2 border rounded'></div></div>"
+        };
+        
+        function showModal(type) {
+            currentFormType = type;
+            const titles = {bid:"New Bid",lead:"New Lead",invoice:"New Invoice",client:"New Client",rate:"New Rate",equipment:"New Equipment"};
+            document.getElementById('modal-title').innerText = titles[type] || "Add";
+            document.getElementById('form-fields').innerHTML = fields[type] || "<p>Coming soon</p>";
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.add('hidden');
+        }
+        
+        function saveForm(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            if(currentFormType === 'bid') {
+                bids.push({id:Date.now(),name:data.name,client:data.client,deadline:data.deadline,total:0,status:'draft'});
+            } else if(currentFormType === 'lead') {
+                leads.push({company:data.company,contact:data.contact,value:parseInt(data.value)||0,status:'New'});
+            } else if(currentFormType === 'invoice') {
+                invoices.push({id:'INV-'+Date.now(),client:data.client,amount:parseInt(data.amount)||0,status:'Draft',due:data.due});
+            } else if(currentFormType === 'client') {
+                clients.push({company:data.company,contact:data.contact,email:data.email,phone:data.phone});
+            } else if(currentFormType === 'rate') {
+                rates.push({id:Date.now(),category:data.category,description:data.description,unit_cost:parseFloat(data.unit_cost)||0,unit:data.unit});
+            } else if(currentFormType === 'equipment') {
+                equipment.push({id:'EQ-'+Date.now(),name:data.name,type:data.type,status:data.status,location:data.location||'Yard',hours:0});
+            }
+            
+            alert("Saved!");
+            saveData();
+            closeModal();
+            renderAll();
+        }
+        
+        function renderAll() {
+            // Refresh the page to show new data
+            location.reload();
+        }
+        
+        function viewItem(collection, id) {
+            let item, title;
+            if(collection === 'bids') { item = bids.find(b => b.id === id); title = 'Bid Details'; }
+            else if(collection === 'leads') { item = leads.find(l => l.company === id); title = 'Lead Details'; }
+            else if(collection === 'invoices') { item = invoices.find(i => i.id === id); title = 'Invoice Details'; }
+            else if(collection === 'clients') { item = clients.find(c => c.company === id); title = 'Client Details'; }
+            else if(collection === 'rates') { item = rates.find(r => r.id === id); title = 'Rate Details'; }
+            else if(collection === 'equipment') { item = equipment.find(e => e.id === id); title = 'Equipment Details'; }
+            
+            if(!item) return;
+            
+            let details = "<div class='space-y-3'>";
+            for(const [key, value] of Object.entries(item)) {
+                details += "<div><span class='text-sm text-gray-500'>" + key.charAt(0).toUpperCase() + key.slice(1) + ":</span><p class='font-medium'>" + (typeof value === 'number' ? '$' + value.toLocaleString() : value) + "</p></div>";
+            }
+            details += "</div><div class='flex gap-2 mt-4'><button onclick='editItem("" + collection + "","" + id + "")' class='px-4 py-2 bg-blue-600 text-white rounded-lg text-sm'>Edit</button><button onclick='deleteItem("" + collection + "","" + id + "")' class='px-4 py-2 bg-red-600 text-white rounded-lg text-sm'>Delete</button></div>";
+            
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('form-fields').innerHTML = details;
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+        
+        function editItem(collection, id) {
+            alert("Edit " + collection + ": " + id);
+        }
+        
+        function deleteItem(collection, id) {
+            if(!confirm("Delete this item?")) return;
+            if(collection === 'bids') bids = bids.filter(b => b.id !== id);
+            else if(collection === 'leads') leads = leads.filter(l => l.company !== id);
+            else if(collection === 'invoices') invoices = invoices.filter(i => i.id !== id);
+            else if(collection === 'clients') clients = clients.filter(c => c.company !== id);
+            else if(collection === 'rates') rates = rates.filter(r => r.id !== id);
+            else if(collection === 'equipment') equipment = equipment.filter(e => e.id !== id);
+            saveData();
+            location.reload();
+        }
+
+    
+        function showQuickAdd() {
+            const menu = "<div class='bg-white rounded-xl p-4'><h3 class='font-bold mb-3'>Quick Add</h3><div class='space-y-2'>" +
+                "<button onclick='showModal(\"bid\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Bid</button>" +
+                "<button onclick='showModal(\"lead\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Lead</button>" +
+                "<button onclick='showModal(\"invoice\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Invoice</button>" +
+                "<button onclick='showModal(\"client\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Client</button>" +
+                "<button onclick='showModal(\"rate\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Rate</button>" +
+                "<button onclick='showModal(\"equipment\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Equipment</button>" +
+                "</div></div>";
+            document.getElementById('form-fields').innerHTML = menu;
+            document.getElementById('modal-title').innerText = "Quick Add";
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+<body>
+    <div class="header">
+        <h1>5B Contracting - BidAssist</h1>
+        <div class="nav">
+            <button class="active" onclick="showView('dashboard')">Projects</button>
+            <button onclick="showView('history')">History</button>
+            <button onclick="showView('rates')">Rates</button>
+        </div>
+    </div>
+    
+    <div id="dashboard" class="container">
+        <div class="stats">
+            <div class="stat-card"><div class="stat-value" id="stat-total">0</div><div class="stat-label">Total Projects</div></div>
+            <div class="stat-card"><div class="stat-value" id="stat-active">0</div><div class="stat-label">Active Bids</div></div>
+            <div class="stat-card"><div class="stat-value" id="stat-won">$0</div><div class="stat-label">Won This Month</div></div>
+            <div class="stat-card"><div class="stat-value" id="stat-pending">$0</div><div class="stat-label">Pending</div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><div class="card-title">Projects</div><button class="btn btn-primary" onclick="showModal('project')">+ New Project</button></div>
+            <div class="grid" id="projectList"></div>
+        </div>
+    </div>
+    
+    <div id="history" class="container hidden">
+        <div class="history-grid">
+            <div class="history-stat"><div class="stat-value" id="hist-winrate">0%</div><div class="stat-label">Win Rate</div></div>
+            <div class="history-stat"><div class="stat-value" id="hist-avg">$0</div><div class="stat-label">Avg Bid</div></div>
+            <div class="history-stat"><div class="stat-value" id="hist-total">$0</div><div class="stat-label">Total Revenue</div></div>
+        </div>
+        <div class="card"><div class="card-title">Bid History</div><table><thead><tr><th>Project</th><th>Client</th><th>Bid</th><th>Status</th><th>Date</th></tr></thead><tbody id="historyList"></tbody></table></div>
+    </div>
+    
+    <div id="rates" class="container hidden">
+        <div class="card"><div class="card-header"><div class="card-title">Rate Card</div><button class="btn btn-primary" onclick="showModal('rate')">+ Add Rate</button></div>
+        <table><thead><tr><th>Category</th><th>Description</th><th class="text-right">Unit Cost</th><th>Unit</th></tr></thead><tbody id="rateList"></tbody></table></div>
+    </div>
+    
+    <div id="detail" class="container hidden">
+        <button class="btn btn-secondary" onclick="showView('dashboard')" style="margin-bottom:1rem">← Back</button>
+        <div class="detail-header"><div><div class="detail-title" id="detail-name"></div><div class="detail-client" id="detail-client"></div></div>
+        <div><button class="btn btn-success" onclick="updateStatus('won')">Mark Won</button><button class="btn btn-danger" onclick="updateStatus('lost')">Mark Lost</button><button class="btn btn-secondary" onclick="printBid()">Print/PDF</button></div></div>
+        <div class="totals-card"><div>Bid Total</div><div class="totals-grid"><div class="total-item"><div class="total-label">Subtotal</div><div class="total-value" id="total-sub">$0</div></div><div class="total-item"><div class="total-label">Overhead</div><div class="total-value" id="total-overhead">$0</div></div><div class="total-item"><div class="total-label">Profit</div><div class="total-value" id="total-profit">$0</div></div><div class="total-item"><div class="total-label">Total</div><div class="total-value" id="total-final">$0</div></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title">Line Items</div></div><div id="lineItems"></div></div>
+    </div>
+    
+    <div id="projectModal" class="modal-overlay"><div class="modal"><div class="modal-header"><h2>New Project</h2><span onclick="hideModal('project')" style="cursor:pointer;font-size:1.5rem">×</span></div>
+        <form onsubmit="saveProject(event)">
+            <div class="form-group"><label class="form-label">Project Name</label><input type="text" class="form-input" name="name" required></div>
+            <div class="form-row"><div class="form-group"><label class="form-label">Client</label><input type="text" class="form-input" name="client" required></div><div class="form-group"><label class="form-label">Deadline</label><input type="date" class="form-input" name="deadline" required></div></div>
+            <div class="form-group"><label class="form-label">Address</label><input type="text" class="form-input" name="address"></div>
+            <div class="form-row"><div class="form-group"><label class="form-label">Overhead %</label><input type="number" class="form-input" name="overhead" value="15"></div><div class="form-group"><label class="form-label">Profit %</label><input type="number" class="form-input" name="profit" value="10"></div></div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Create Project</button>
+        </form></div></div>
+    
+    <div id="rateModal" class="modal-overlay"><div class="modal"><div class="modal-header"><h2>Add Rate</h2><span onclick="hideModal('rate')" style="cursor:pointer;font-size:1.5rem">×</span></div>
+        <form onsubmit="saveRate(event)">
+            <div class="form-group"><label class="form-label">Category</label><input type="text" class="form-input" name="category" required></div>
+            <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" name="description"></div>
+            <div class="form-row"><div class="form-group"><label class="form-label">Unit Cost</label><input type="number" class="form-input" name="unit_cost" step="0.01" required></div><div class="form-group"><label class="form-label">Unit</label><input type="text" class="form-input" name="unit" required></div></div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Add Rate</button>
+        </form></div></div>
+
+    <script>
+
+        // LocalStorage Persistence
+        function saveData() {
+            const data = { bids, leads, invoices, clients, rates, tickets, changeOrders, subs, equipment, fieldReports, jobCosting };
+            localStorage.setItem('bidassist_data', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('bidassist_data');
+            if(saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if(data.bids && data.bids.length > 0) bids = data.bids;
+                    if(data.leads && data.leads.length > 0) leads = data.leads;
+                    if(data.invoices && data.invoices.length > 0) invoices = data.invoices;
+                    if(data.clients && data.clients.length > 0) clients = data.clients;
+                    if(data.rates && data.rates.length > 0) rates = data.rates;
+                    if(data.equipment && data.equipment.length > 0) equipment = data.equipment;
+                } catch(e) { console.log('Error loading data', e); }
+            }
+        }
+
+        // Load on startup
+        loadData();
+
+    const projects = [
+        {id:1,name:"Eastdale Commons Shopping Center",client:"Coleman Development Group",address:"2800 Eastdale Circle, Montgomery, AL 36117",deadline:"2026-03-15",total:87500,status:"submitted",overhead:15,profit:12,line_items:[{category:"Excavation",description:"Building pad excavation",quantity:4500,unit_cost:4.5},{category:"Excavation",description:"Storm drain trench",quantity:1200,unit_cost:5.5},{category:"Backfill",description:"Backfill for utilities",quantity:2800,unit_cost:18},{category:"Import Fill",description:"Select fill for parking",quantity:3200,unit_cost:32},{category:"Haul Off",description:"Excess soil removal",quantity:1900,unit_cost:28},{category:"Trench Box",description:"Trench safety rental",quantity:8,unit_cost:250},{category:"Operator",description:"3 crew members",quantity:40,unit_cost:65}]},
+        {id:2,name:"Hillside Residential Phase 2",client:"Southern Homes LLC",address:"4500 Hillside Dr, Montgomery, AL 36109",deadline:"2026-03-08",total:142000,status:"won",overhead:15,profit:15,line_items:[{category:"Excavation",description:"Lot clearing",quantity:8500,unit_cost:4},{category:"Excavation",description:"Street grading",quantity:4200,unit_cost:4.2},{category:"Backfill",description:"Utility trench",quantity:5600,unit_cost:18},{category:"Import Fill",description:"Driveway stone",quantity:1800,unit_cost:35},{category:"Haul Off",description:"Debris removal",quantity:420,unit_cost:45},{category:"Operator",description:"Equipment operators",quantity:85,unit_cost:65},{category:"Final Grade",description:"Finish grading",quantity:2.5,unit_cost:2500}]},
+        {id:3,name:"Downtown Montgomery Mixed-Use",client:"Capital City Developers",address:"125 Commerce St, Montgomery, AL 36104",deadline:"2026-03-20",total:225000,status:"draft",overhead:18,profit:18,line_items:[{category:"Excavation",description:"Deep foundation",quantity:6800,unit_cost:6.5},{category:"Excavation",description:"Basement parking",quantity:4200,unit_cost:5.8},{category:"Backfill",description:"Structural backfill",quantity:5200,unit_cost:22},{category:"Import Fill",description:"CLSM",quantity:1200,unit_cost:65},{category:"Haul Off",description:"Rock and soil",quantity:5800,unit_cost:32},{category:"Trench Box",description:"Commercial trench",quantity:15,unit_cost:350},{category:"Operator",description:"Specialized operators",quantity:120,unit_cost:75},{category:"Dewatering",description:"Well point system",quantity:1,unit_cost:8500}]},
+        {id:4,name:"VA Hospital Parking Expansion",client:"US Dept of Veterans Affairs",address:"215 Perry Hill Rd, Montgomery, AL 36109",deadline:"2026-02-28",total:67500,status:"submitted",overhead:12,profit:8,line_items:[{category:"Excavation",description:"Asphalt removal",quantity:2800,unit_cost:2.5},{category:"Excavation",description:"Gravel base",quantity:1900,unit_cost:4.8},{category:"Import Fill",description:"Crushed limestone",quantity:2200,unit_cost:38},{category:"Haul Off",description:"Asphalt and base",quantity:450,unit_cost:35},{category:"Operator",description:"2 operators",quantity:32,unit_cost:65}]},
+        {id:5,name:"River Region Medical Utility",client:"River Region Health System",address:"100 Medical Center Dr, Montgomery, AL 36117",deadline:"2026-02-20",total:45000,status:"lost",overhead:15,profit:10,line_items:[{category:"Excavation",description:"Water main trench",quantity:850,unit_cost:6.8},{category:"Excavation",description:"Sewer main trench",quantity:620,unit_cost:7.2},{category:"Backfill",description:"Pipe zone backfill",quantity:980,unit_cost:24},{category:"Haul Off",description:"Material",quantity:490,unit_cost:28},{category:"Operator",description:"Utility crew",quantity:28,unit_cost:70}]},
+        {id:6,name:"AUM Site Prep",client:"Auburn University at Montgomery",address:"7400 Eastbrook Dr, Montgomery, AL 36117",deadline:"2026-04-01",total:185000,status:"submitted",overhead:15,profit:14,line_items:[{category:"Excavation",description:"Athletic fields",quantity:12500,unit_cost:4.2},{category:"Excavation",description:"Parking lot subgrade",quantity:5800,unit_cost:4.5},{category:"Backfill",description:"General backfill",quantity:8200,unit_cost:18},{category:"Import Fill",description:"Athletic field mix",quantity:4500,unit_cost:42},{category:"Haul Off",description:"Excess cut",quantity:6800,unit_cost:26},{category:"Operator",description:"5 operators",quantity:95,unit_cost:68},{category:"Final Grade",description:"Fine grade and seed",quantity:4.2,unit_cost:3200}]},
+        {id:7,name:"Maxwell AFB Building 805",client:"US Air Force / DCMA",address:"Maxwell AFB, Montgomery, AL 36112",deadline:"2026-03-10",total:38000,status:"won",overhead:15,profit:12,line_items:[{category:"Excavation",description:"HVAC unit pads",quantity:180,unit_cost:8.5},{category:"Excavation",description:"Generator pad",quantity:85,unit_cost:9.2},{category:"Backfill",description:"Utility backfill",quantity:320,unit_cost:22},{category:"Concrete",description:"Pad forming and pour",quantity:12,unit_cost:850},{category:"Operator",description:"Small crew",quantity:18,unit_cost:65}]},
+        {id:8,name:"ASU Storm Drain",client:"Alabama State University",address:"915 Jackson St, Montgomery, AL 36104",deadline:"2026-03-25",total:92000,status:"draft",overhead:15,profit:12,line_items:[{category:"Excavation",description:"Storm drain trench",quantity:2400,unit_cost:6.2},{category:"Excavation",description:"Inlet structures",quantity:18,unit_cost:450},{category:"Backfill",description:"Trench backfill",quantity:1800,unit_cost:20},{category:"Haul Off",description:"Excess soil",quantity:600,unit_cost:30},{category:"Operator",description:"Utility crew",quantity:45,unit_cost:68}]}
+    ];
+    
+    const rates = [
+        {category:"Excavation",description:"Standard cut (common soil)",unit_cost:4.50,unit:"cu yd"},
+        {category:"Excavation",description:"Rock excavation (requires blasting)",unit_cost:12.00,unit:"cu yd"},
+        {category:"Excavation",description:"Trench digging (utility lines)",unit_cost:6.50,unit:"LF"},
+        {category:"Backfill",description:"Native backfill",unit_cost:18.00,unit:"cu yd"},
+        {category:"Backfill",description:"Select backfill (sand/gravel)",unit_cost:24.00,unit:"cu yd"},
+        {category:"Import Fill",description:"Select fill delivered",unit_cost:32.00,unit:"cu yd"},
+        {category:"Import Fill",description:"Crushed limestone",unit_cost:38.00,unit:"cu yd"},
+        {category:"Import Fill",description:"Topsoil",unit_cost:28.00,unit:"cu yd"},
+        {category:"Haul Off",description:"Excess soil hauling",unit_cost:28.00,unit:"cu yd"},
+        {category:"Haul Off",description:"Rock hauling",unit_cost:35.00,unit:"cu yd"},
+        {category:"Trench Box",description:"Trench box rental/day",unit_cost:250.00,unit:"day"},
+        {category:"Equipment",description:"Excavator CAT 320",unit_cost:450.00,unit:"day"},
+        {category:"Equipment",description:"Dozer CAT D6",unit_cost:550.00,unit:"day"},
+        {category:"Equipment",description:"Loader CAT 950",unit_cost:350.00,unit:"day"},
+        {category:"Operator",description:"Equipment operator",unit_cost:65.00,unit:"hr"},
+        {category:"Operator",description:"Skilled operator",unit_cost:75.00,unit:"hr"},
+        {category:"Final Grade",description:"Finish grading/acre",unit_cost:3200.00,unit:"acre"},
+        {category:"Dewatering",description:"Well point system",unit_cost:8500.00,unit:"job"}
+    ];
+    
+    let currentProject = null;
+    
+    function renderProjects() {
+        const list = document.getElementById('projectList');
+        if (!projects.length) { list.innerHTML = '<div class="empty">No projects</div>'; return; }
+        list.innerHTML = projects.map(p => '<div class="project-card" onclick="viewProject('+p.id+')"><div class="project-name">'+p.name+'</div><div class="project-client">'+p.client+'</div><div class="project-meta"><span>'+(p.deadline?new Date(p.deadline).toLocaleDateString():'No deadline')+'</span><span class="badge badge-'+p.status+'">'+p.status+'</span></div><div class="project-total">$'+p.total.toLocaleString()+'</div></div>').join('');
+    }
+    
+    function renderStats() {
+        const active = projects.filter(p => p.status === 'draft' || p.status === 'submitted').length;
+        const won = projects.filter(p => p.status === 'won');
+        const wonMonth = won.filter(p => new Date(p.deadline).getMonth() === new Date().getMonth()).reduce((s,p) => s + p.total, 0);
+        const pending = projects.filter(p => p.status === 'submitted').reduce((s,p) => s + p.total, 0);
+        document.getElementById('stat-total').textContent = projects.length;
+        document.getElementById('stat-active').textContent = active;
+        document.getElementById('stat-won').textContent = '$' + wonMonth.toLocaleString();
+        document.getElementById('stat-pending').textContent = '$' + pending.toLocaleString();
+    }
+    
+    function renderHistory() {
+        const won = projects.filter(p => p.status === 'won');
+        const lost = projects.filter(p => p.status === 'lost');
+        const total = projects.reduce((s,p) => s + (p.total||0), 0);
+        const avg = projects.length ? Math.round(total/projects.length) : 0;
+        const winRate = (won.length + lost.length) ? Math.round(won.length/(won.length+lost.length)*100) : 0;
+        document.getElementById('hist-winrate').textContent = winRate + '%';
+        document.getElementById('hist-avg').textContent = '$' + avg.toLocaleString();
+        document.getElementById('hist-total').textContent = '$' + won.reduce((s,p) => s + p.total, 0).toLocaleString();
+        document.getElementById('historyList').innerHTML = projects.map(p => '<tr><td>'+p.name+'</td><td>'+p.client+'</td><td>$'+(p.total||0).toLocaleString()+'</td><td><span class="badge badge-'+p.status+'">'+p.status+'</span></td><td>'+(p.deadline?new Date(p.deadline).toLocaleDateString():'-')+'</td></tr>').join('') || '<tr><td colspan="5" class="empty">No history</td></tr>';
+    }
+    
+    function renderRates() {
+        document.getElementById('rateList').innerHTML = rates.map(r => '<tr><td>'+r.category+'</td><td>'+r.description+'</td><td class="text-right">$'+r.unit_cost+'</td><td>'+r.unit+'</td></tr>').join('');
+    }
+    
+    function viewProject(id) {
+        currentProject = projects.find(p => p.id === id);
+        if (!currentProject) return;
+        document.getElementById('detail-name').textContent = currentProject.name;
+        document.getElementById('detail-client').textContent = currentProject.client;
+        
+        let subtotal = 0;
+        const items = currentProject.line_items || [];
+        document.getElementById('lineItems').innerHTML = items.map(item => {
+            const total = (item.quantity || 0) * (item.unit_cost || 0);
+            subtotal += total;
+            return '<div style="display:flex;justify-content:space-between;padding:0.5rem;border-bottom:1px solid var(--border)"><span>'+item.category+' - '+(item.description||'')+'</span><span>$'+total.toLocaleString()+'</span></div>';
+        }).join('') || '<div class="empty">No line items</div>';
+        
+        const overhead = (subtotal * (currentProject.overhead||0)) / 100;
+        const profit = (subtotal * (currentProject.profit||0)) / 100;
+        const total = subtotal + overhead + profit;
+        document.getElementById('total-sub').textContent = '$' + subtotal.toLocaleString();
+        document.getElementById('total-overhead').textContent = '$' + overhead.toLocaleString();
+        document.getElementById('total-profit').textContent = '$' + profit.toLocaleString();
+        document.getElementById('total-final').textContent = '$' + total.toLocaleString();
+        
+        showView('detail');
+    }
+    
+    function updateStatus(status) {
+        if (!currentProject) return;
+        currentProject.status = status;
+        renderProjects();
+        renderStats();
+        showView('dashboard');
+    }
+    
+    function printBid() {
+        if (!currentProject) return;
+        let html = '<html><head><title>Bid - '+currentProject.name+'</title><script src="https://cdn.tailwindcss.com">
+        let invoices = [{id:"INV-001",client:"Coleman Development",amount:87500,status:"Sent",due:"2026-03-15"},{id:"INV-002",client:"Southern Homes",amount:142000,status:"Paid",due:"2026-02-28"}];
+        let rates = [{id:1,category:"Excavation",description:"Standard cut",unit_cost:4.50,unit:"cu yd"},{id:2,category:"Equipment",description:"CAT 320",unit_cost:450,unit:"day"},{id:3,category:"Operator",description:"Operator",unit_cost:65,unit:"hr"}];
+        let equipment = [{id:"EQ-001",name:"CAT 320 Excavator",type:"Excavator",status:"Active",location:"Yard",hours:4520},{id:"EQ-002",name:"John Deere Loader",type:"Loader",status:"Active",location:"Job",hours:3200}];
+        let tickets = [{id:"811-001",location:"2800 Eastdale Circle",status:"Active",expires:"2026-03-01"}];
+        let changeOrders = [{project:"Eastdale Commons",desc:"Additional grading",amount:8500,status:"Pending"}];
+        let subs = [{company:"Alabama Concrete",trade:"Concrete",contact:"Mike Jones",status:"Available"}];
+        let fieldReports = [{id:"FR-001",date:"2026-02-25",project:"Eastdale",crew:4,hours:8,notes:"Done",issues:0}];
+        let jobCosting = [{project:"Eastdale Commons",estimated:87500,actual:82000,status:"Under"},{project:"Hillside Residential",estimated:142000,actual:138500,status:"Under"}];
+
+    
+        let currentFormType = "";
+        let currentEditId = null;
+        let currentCollection = null;
+        
+        const fields = {
+            bid: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Project Name</label><input name='name' placeholder='e.g. Eastdale Shopping Center' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Client</label><input name='client' placeholder='Client company' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Deadline</label><input name='deadline' type='date' class='w-full p-2 border rounded' required></div></div>",
+            lead: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Company</label><input name='company' placeholder='Company name' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Contact</label><input name='contact' placeholder='Contact name' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Value ($)</label><input name='value' type='number' placeholder='50000' class='w-full p-2 border rounded'></div></div>",
+            invoice: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Client</label><input name='client' placeholder='Client name' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Amount ($)</label><input name='amount' type='number' placeholder='0' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Due Date</label><input name='due' type='date' class='w-full p-2 border rounded' required></div></div>",
+            client: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Company</label><input name='company' placeholder='Company name' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Contact</label><input name='contact' placeholder='Contact name' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Email</label><input name='email' type='email' placeholder='email@company.com' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Phone</label><input name='phone' placeholder='(334) 555-0100' class='w-full p-2 border rounded'></div></div>",
+            rate: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Category</label><input name='category' placeholder='e.g. Excavation' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Description</label><input name='description' placeholder='Description of work' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Unit Cost ($)</label><input name='unit_cost' type='number' placeholder='0.00' step='0.01' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Unit</label><input name='unit' placeholder='cu yd, hr, day' class='w-full p-2 border rounded'></div></div>",
+            equipment: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Equipment Name</label><input name='name' placeholder='e.g. CAT 320 Excavator' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Type</label><select name='type' class='w-full p-2 border rounded'><option>Excavator</option><option>Loader</option><option>Dozer</option><option>Truck</option></select></div><div><label class='block text-sm font-medium mb-1'>Status</label><select name='status' class='w-full p-2 border rounded'><option>Active</option><option>Maintenance</option></select></div><div><label class='block text-sm font-medium mb-1'>Location</label><input name='location' placeholder='Yard, Shop, Job Site' class='w-full p-2 border rounded'></div></div>"
+        };
+        
+        function showModal(type) {
+            currentFormType = type;
+            const titles = {bid:"New Bid",lead:"New Lead",invoice:"New Invoice",client:"New Client",rate:"New Rate",equipment:"New Equipment"};
+            document.getElementById('modal-title').innerText = titles[type] || "Add";
+            document.getElementById('form-fields').innerHTML = fields[type] || "<p>Coming soon</p>";
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.add('hidden');
+        }
+        
+        function saveForm(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            if(currentFormType === 'bid') {
+                bids.push({id:Date.now(),name:data.name,client:data.client,deadline:data.deadline,total:0,status:'draft'});
+            } else if(currentFormType === 'lead') {
+                leads.push({company:data.company,contact:data.contact,value:parseInt(data.value)||0,status:'New'});
+            } else if(currentFormType === 'invoice') {
+                invoices.push({id:'INV-'+Date.now(),client:data.client,amount:parseInt(data.amount)||0,status:'Draft',due:data.due});
+            } else if(currentFormType === 'client') {
+                clients.push({company:data.company,contact:data.contact,email:data.email,phone:data.phone});
+            } else if(currentFormType === 'rate') {
+                rates.push({id:Date.now(),category:data.category,description:data.description,unit_cost:parseFloat(data.unit_cost)||0,unit:data.unit});
+            } else if(currentFormType === 'equipment') {
+                equipment.push({id:'EQ-'+Date.now(),name:data.name,type:data.type,status:data.status,location:data.location||'Yard',hours:0});
+            }
+            
+            alert("Saved!");
+            saveData();
+            closeModal();
+            renderAll();
+        }
+        
+        function renderAll() {
+            // Refresh the page to show new data
+            location.reload();
+        }
+        
+        function viewItem(collection, id) {
+            let item, title;
+            if(collection === 'bids') { item = bids.find(b => b.id === id); title = 'Bid Details'; }
+            else if(collection === 'leads') { item = leads.find(l => l.company === id); title = 'Lead Details'; }
+            else if(collection === 'invoices') { item = invoices.find(i => i.id === id); title = 'Invoice Details'; }
+            else if(collection === 'clients') { item = clients.find(c => c.company === id); title = 'Client Details'; }
+            else if(collection === 'rates') { item = rates.find(r => r.id === id); title = 'Rate Details'; }
+            else if(collection === 'equipment') { item = equipment.find(e => e.id === id); title = 'Equipment Details'; }
+            
+            if(!item) return;
+            
+            let details = "<div class='space-y-3'>";
+            for(const [key, value] of Object.entries(item)) {
+                details += "<div><span class='text-sm text-gray-500'>" + key.charAt(0).toUpperCase() + key.slice(1) + ":</span><p class='font-medium'>" + (typeof value === 'number' ? '$' + value.toLocaleString() : value) + "</p></div>";
+            }
+            details += "</div><div class='flex gap-2 mt-4'><button onclick='editItem("" + collection + "","" + id + "")' class='px-4 py-2 bg-blue-600 text-white rounded-lg text-sm'>Edit</button><button onclick='deleteItem("" + collection + "","" + id + "")' class='px-4 py-2 bg-red-600 text-white rounded-lg text-sm'>Delete</button></div>";
+            
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('form-fields').innerHTML = details;
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+        
+        function editItem(collection, id) {
+            alert("Edit " + collection + ": " + id);
+        }
+        
+        function deleteItem(collection, id) {
+            if(!confirm("Delete this item?")) return;
+            if(collection === 'bids') bids = bids.filter(b => b.id !== id);
+            else if(collection === 'leads') leads = leads.filter(l => l.company !== id);
+            else if(collection === 'invoices') invoices = invoices.filter(i => i.id !== id);
+            else if(collection === 'clients') clients = clients.filter(c => c.company !== id);
+            else if(collection === 'rates') rates = rates.filter(r => r.id !== id);
+            else if(collection === 'equipment') equipment = equipment.filter(e => e.id !== id);
+            saveData();
+            location.reload();
+        }
+
+    
+        function showQuickAdd() {
+            const menu = "<div class='bg-white rounded-xl p-4'><h3 class='font-bold mb-3'>Quick Add</h3><div class='space-y-2'>" +
+                "<button onclick='showModal(\"bid\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Bid</button>" +
+                "<button onclick='showModal(\"lead\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Lead</button>" +
+                "<button onclick='showModal(\"invoice\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Invoice</button>" +
+                "<button onclick='showModal(\"client\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Client</button>" +
+                "<button onclick='showModal(\"rate\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Rate</button>" +
+                "<button onclick='showModal(\"equipment\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Equipment</button>" +
+                "</div></div>";
+            document.getElementById('form-fields').innerHTML = menu;
+            document.getElementById('modal-title').innerText = "Quick Add";
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head><body style="font-family:Arial;padding:40px;"><h1 style="color:#1a5632">5B CONTRACTING LLC</h1><h2>Bid: '+currentProject.name+'</h2><p><strong>Client:</strong> '+currentProject.client+'<br><strong>Address:</strong> '+(currentProject.address||'N/A')+'<br><strong>Date:</strong> '+new Date().toLocaleDateString()+'</p>';
+        let subtotal = 0;
+        (currentProject.line_items||[]).forEach(item => { const total = item.quantity*item.unit_cost; subtotal += total; html += '<p>'+item.category+' - '+(item.description||'')+': $'+total.toLocaleString()+'</p>'; });
+        const overhead = subtotal * currentProject.overhead / 100;
+        const profit = subtotal * currentProject.profit / 100;
+        html += '<hr><p>Subtotal: $'+subtotal.toLocaleString()+'</p><p>Overhead: $'+overhead.toLocaleString()+'</p><p>Profit: $'+profit.toLocaleString()+'</p><h2>Total: $'+(subtotal+overhead+profit).toLocaleString()+'</h2>
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 id="modal-title" class="text-lg font-bold">Add</h2>
+                <button onclick="closeModal()" class="text-2xl text-gray-400">&times;</button>
+            </div>
+            <form class="p-4 space-y-4" onsubmit="saveForm(event)">
+                <div id="form-fields"></div>
+                <div class="flex justify-end gap-2 pt-4 border-t">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded-lg text-sm">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-yellow-500 text-black font-bold rounded-lg text-sm">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body></html>';
+        const win = window.open("","_blank"); win.document.write(html); win.document.close(); win.print();
+    }
+    
+    function showView(view) {
+        document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+        if (view === 'dashboard') { document.getElementById('dashboard').classList.remove('hidden'); renderProjects(); renderStats(); document.querySelector('.nav button').classList.add('active'); }
+        else if (view === 'history') { document.getElementById('history').classList.remove('hidden'); renderHistory(); document.querySelectorAll('.nav button')[1].classList.add('active'); }
+        else if (view === 'rates') { document.getElementById('rates').classList.remove('hidden'); renderRates(); document.querySelectorAll('.nav button')[2].classList.add('active'); }
+        else if (view === 'detail') { document.getElementById('detail').classList.remove('hidden'); }
+    }
+    
+    function showModal(type) { document.getElementById(type+'Modal').style.display = 'flex'; }
+    function hideModal(type) { document.getElementById(type+'Modal').style.display = 'none'; }
+    function saveProject(e) { e.preventDefault(); const f = new FormData(e.target); projects.push({id:projects.length+1,name:f.get('name'),client:f.get('client'),address:f.get('address'),deadline:f.get('deadline'),total:0,status:'draft',overhead:parseFloat(f.get('overhead')),profit:parseFloat(f.get('profit')),line_items:[]}); hideModal('project'); renderProjects(); renderStats(); e.target.reset(); }
+    function saveRate(e) { e.preventDefault(); const f = new FormData(e.target); rates.push({category:f.get('category'),description:f.get('description'),unit_cost:parseFloat(f.get('unit_cost')),unit:f.get('unit')}); hideModal('rate'); renderRates(); e.target.reset(); }
+    
+    renderProjects(); renderStats();
+    
+        let invoices = [{id:"INV-001",client:"Coleman Development",amount:87500,status:"Sent",due:"2026-03-15"},{id:"INV-002",client:"Southern Homes",amount:142000,status:"Paid",due:"2026-02-28"}];
+        let rates = [{id:1,category:"Excavation",description:"Standard cut",unit_cost:4.50,unit:"cu yd"},{id:2,category:"Equipment",description:"CAT 320",unit_cost:450,unit:"day"},{id:3,category:"Operator",description:"Operator",unit_cost:65,unit:"hr"}];
+        let equipment = [{id:"EQ-001",name:"CAT 320 Excavator",type:"Excavator",status:"Active",location:"Yard",hours:4520},{id:"EQ-002",name:"John Deere Loader",type:"Loader",status:"Active",location:"Job",hours:3200}];
+        let tickets = [{id:"811-001",location:"2800 Eastdale Circle",status:"Active",expires:"2026-03-01"}];
+        let changeOrders = [{project:"Eastdale Commons",desc:"Additional grading",amount:8500,status:"Pending"}];
+        let subs = [{company:"Alabama Concrete",trade:"Concrete",contact:"Mike Jones",status:"Available"}];
+        let fieldReports = [{id:"FR-001",date:"2026-02-25",project:"Eastdale",crew:4,hours:8,notes:"Done",issues:0}];
+        let jobCosting = [{project:"Eastdale Commons",estimated:87500,actual:82000,status:"Under"},{project:"Hillside Residential",estimated:142000,actual:138500,status:"Under"}];
+
+    
+        let currentFormType = "";
+        let currentEditId = null;
+        let currentCollection = null;
+        
+        const fields = {
+            bid: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Project Name</label><input name='name' placeholder='e.g. Eastdale Shopping Center' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Client</label><input name='client' placeholder='Client company' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Deadline</label><input name='deadline' type='date' class='w-full p-2 border rounded' required></div></div>",
+            lead: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Company</label><input name='company' placeholder='Company name' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Contact</label><input name='contact' placeholder='Contact name' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Value ($)</label><input name='value' type='number' placeholder='50000' class='w-full p-2 border rounded'></div></div>",
+            invoice: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Client</label><input name='client' placeholder='Client name' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Amount ($)</label><input name='amount' type='number' placeholder='0' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Due Date</label><input name='due' type='date' class='w-full p-2 border rounded' required></div></div>",
+            client: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Company</label><input name='company' placeholder='Company name' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Contact</label><input name='contact' placeholder='Contact name' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Email</label><input name='email' type='email' placeholder='email@company.com' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Phone</label><input name='phone' placeholder='(334) 555-0100' class='w-full p-2 border rounded'></div></div>",
+            rate: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Category</label><input name='category' placeholder='e.g. Excavation' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Description</label><input name='description' placeholder='Description of work' class='w-full p-2 border rounded'></div><div><label class='block text-sm font-medium mb-1'>Unit Cost ($)</label><input name='unit_cost' type='number' placeholder='0.00' step='0.01' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Unit</label><input name='unit' placeholder='cu yd, hr, day' class='w-full p-2 border rounded'></div></div>",
+            equipment: "<div class='space-y-3'><div><label class='block text-sm font-medium mb-1'>Equipment Name</label><input name='name' placeholder='e.g. CAT 320 Excavator' class='w-full p-2 border rounded' required></div><div><label class='block text-sm font-medium mb-1'>Type</label><select name='type' class='w-full p-2 border rounded'><option>Excavator</option><option>Loader</option><option>Dozer</option><option>Truck</option></select></div><div><label class='block text-sm font-medium mb-1'>Status</label><select name='status' class='w-full p-2 border rounded'><option>Active</option><option>Maintenance</option></select></div><div><label class='block text-sm font-medium mb-1'>Location</label><input name='location' placeholder='Yard, Shop, Job Site' class='w-full p-2 border rounded'></div></div>"
+        };
+        
+        function showModal(type) {
+            currentFormType = type;
+            const titles = {bid:"New Bid",lead:"New Lead",invoice:"New Invoice",client:"New Client",rate:"New Rate",equipment:"New Equipment"};
+            document.getElementById('modal-title').innerText = titles[type] || "Add";
+            document.getElementById('form-fields').innerHTML = fields[type] || "<p>Coming soon</p>";
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.add('hidden');
+        }
+        
+        function saveForm(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            if(currentFormType === 'bid') {
+                bids.push({id:Date.now(),name:data.name,client:data.client,deadline:data.deadline,total:0,status:'draft'});
+            } else if(currentFormType === 'lead') {
+                leads.push({company:data.company,contact:data.contact,value:parseInt(data.value)||0,status:'New'});
+            } else if(currentFormType === 'invoice') {
+                invoices.push({id:'INV-'+Date.now(),client:data.client,amount:parseInt(data.amount)||0,status:'Draft',due:data.due});
+            } else if(currentFormType === 'client') {
+                clients.push({company:data.company,contact:data.contact,email:data.email,phone:data.phone});
+            } else if(currentFormType === 'rate') {
+                rates.push({id:Date.now(),category:data.category,description:data.description,unit_cost:parseFloat(data.unit_cost)||0,unit:data.unit});
+            } else if(currentFormType === 'equipment') {
+                equipment.push({id:'EQ-'+Date.now(),name:data.name,type:data.type,status:data.status,location:data.location||'Yard',hours:0});
+            }
+            
+            alert("Saved!");
+            saveData();
+            closeModal();
+            renderAll();
+        }
+        
+        function renderAll() {
+            // Refresh the page to show new data
+            location.reload();
+        }
+        
+        function viewItem(collection, id) {
+            let item, title;
+            if(collection === 'bids') { item = bids.find(b => b.id === id); title = 'Bid Details'; }
+            else if(collection === 'leads') { item = leads.find(l => l.company === id); title = 'Lead Details'; }
+            else if(collection === 'invoices') { item = invoices.find(i => i.id === id); title = 'Invoice Details'; }
+            else if(collection === 'clients') { item = clients.find(c => c.company === id); title = 'Client Details'; }
+            else if(collection === 'rates') { item = rates.find(r => r.id === id); title = 'Rate Details'; }
+            else if(collection === 'equipment') { item = equipment.find(e => e.id === id); title = 'Equipment Details'; }
+            
+            if(!item) return;
+            
+            let details = "<div class='space-y-3'>";
+            for(const [key, value] of Object.entries(item)) {
+                details += "<div><span class='text-sm text-gray-500'>" + key.charAt(0).toUpperCase() + key.slice(1) + ":</span><p class='font-medium'>" + (typeof value === 'number' ? '$' + value.toLocaleString() : value) + "</p></div>";
+            }
+            details += "</div><div class='flex gap-2 mt-4'><button onclick='editItem("" + collection + "","" + id + "")' class='px-4 py-2 bg-blue-600 text-white rounded-lg text-sm'>Edit</button><button onclick='deleteItem("" + collection + "","" + id + "")' class='px-4 py-2 bg-red-600 text-white rounded-lg text-sm'>Delete</button></div>";
+            
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('form-fields').innerHTML = details;
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+        
+        function editItem(collection, id) {
+            alert("Edit " + collection + ": " + id);
+        }
+        
+        function deleteItem(collection, id) {
+            if(!confirm("Delete this item?")) return;
+            if(collection === 'bids') bids = bids.filter(b => b.id !== id);
+            else if(collection === 'leads') leads = leads.filter(l => l.company !== id);
+            else if(collection === 'invoices') invoices = invoices.filter(i => i.id !== id);
+            else if(collection === 'clients') clients = clients.filter(c => c.company !== id);
+            else if(collection === 'rates') rates = rates.filter(r => r.id !== id);
+            else if(collection === 'equipment') equipment = equipment.filter(e => e.id !== id);
+            saveData();
+            location.reload();
+        }
+
+    
+        function showQuickAdd() {
+            const menu = "<div class='bg-white rounded-xl p-4'><h3 class='font-bold mb-3'>Quick Add</h3><div class='space-y-2'>" +
+                "<button onclick='showModal(\"bid\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Bid</button>" +
+                "<button onclick='showModal(\"lead\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Lead</button>" +
+                "<button onclick='showModal(\"invoice\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Invoice</button>" +
+                "<button onclick='showModal(\"client\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Client</button>" +
+                "<button onclick='showModal(\"rate\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Rate</button>" +
+                "<button onclick='showModal(\"equipment\")' class='w-full text-left px-3 py-2 hover:bg-gray-100 rounded'>New Equipment</button>" +
+                "</div></div>";
+            document.getElementById('form-fields').innerHTML = menu;
+            document.getElementById('modal-title').innerText = "Quick Add";
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+
+    </script>
+
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 id="modal-title" class="text-lg font-bold">Add</h2>
+                <button onclick="closeModal()" class="text-2xl text-gray-400">&times;</button>
+            </div>
+            <form class="p-4 space-y-4" onsubmit="saveForm(event)">
+                <div id="form-fields"></div>
+                <div class="flex justify-end gap-2 pt-4 border-t">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded-lg text-sm">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-yellow-500 text-black font-bold rounded-lg text-sm">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
