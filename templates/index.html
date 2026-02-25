@@ -153,12 +153,12 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
                     <h3 class="font-bold text-gray-800 mb-4">Revenue Trends</h3>
-                    <canvas id="revenueChart" height="250"></canvas>
+                    <canvas id="revenueChart" style="max-height: 300px;"></canvas>
                 </div>
                 <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
                     <h3 class="font-bold text-gray-800 mb-4">Pipeline by Status</h3>
                     <div class="flex justify-center">
-                        <canvas id="pipelineChart" height="250"></canvas>
+                        <canvas id="pipelineChart" style="max-height: 300px;"></canvas>
                     </div>
                 </div>
             </div>
@@ -283,7 +283,14 @@
         <div id="view-bid-editor" class="fade-in hidden">
             <div class="no-print flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200 shadow-sm mb-6">
                 <div class="flex items-center gap-4 text-sm">
-                    <span class="text-gray-500">Status:</span>
+                    <span class="text-gray-500">Select Bid:</span>
+                <select id="bid-selector" onchange="loadBid(this.value)" class="border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm font-medium">
+                    <option value="1">Highland Subdivision Phase 2</option>
+                    <option value="2">Eastdale Commons</option>
+                    <option value="3">VA Hospital</option>
+                    <option value="4">Downtown Mixed-Use</option>
+                </select>
+                <span class="text-gray-500 ml-4">Status:</span>
                     <select class="border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm font-medium">
                         <option>Draft</option>
                         <option>Submitted</option>
@@ -634,7 +641,7 @@
                 type: 'line',
                 data: {
                     labels:['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'],
-                    datasets:[{ label: 'Revenue', data:[150k, 180k, 120k, 210k, 250k, 290k], borderColor: '#eab308', backgroundColor: 'rgba(234, 179, 8, 0.1)', borderWidth: 3, tension: 0.3, fill: true }]
+                    datasets:[{ label: 'Revenue', data:[150000, 180000, 120000, 210000, 250000, 290000], borderColor: '#eab308', backgroundColor: 'rgba(234, 179, 8, 0.1)', borderWidth: 3, tension: 0.3, fill: true }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} } }
             });
@@ -642,13 +649,36 @@
                 type: 'doughnut',
                 data: {
                     labels:['Draft', 'Submitted', 'Negotiation'],
-                    datasets:[{ data:[45k, 250k, 130k], backgroundColor:['#fef08a', '#3b82f6', '#ca8a04'], borderWidth: 0 }]
+                    datasets:[{ data:[45000, 250000, 130000], backgroundColor:['#fef08a', '#3b82f6', '#ca8a04'], borderWidth: 0 }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom' } } }
             });
         }
 
-        // Initialize Everything on Load
+        // Bid data
+const bidsData = {
+    1: { name: 'Highland Subdivision Phase 2', client: 'Apex Development', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 1500 },{ category: 'Excavation', desc: 'Cut to subgrade', qty: 1200, cost: 12.50 }]},
+    2: { name: 'Eastdale Commons', client: 'Coleman Dev', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 2500 }]},
+    3: { name: 'VA Hospital', client: 'US Govt', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 1200 }]},
+    4: { name: 'Downtown Mixed-Use', client: 'Capital City', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 3000 }]}
+};
+
+function loadBid(id) {
+    const bid = bidsData[id];
+    document.getElementById('page-subtitle').innerText = 'Editing: ' + bid.name;
+    let subtotal = 0;
+    let html = '';
+    bid.items.forEach(item => {
+        const total = item.qty * item.cost;
+        subtotal += total;
+        html += '<tr><td>'+item.category+'</td><td>'+item.desc+'</td><td class="text-center">'+item.qty+'</td><td class="text-right">$'+item.cost.toFixed(2)+'</td><td class="text-right font-medium">$'+total.toLocaleString()+'</td></tr>';
+    });
+    document.getElementById('line-items-body').innerHTML = html;
+    document.getElementById('subtotal-val').innerText = '$'+subtotal.toLocaleString();
+    document.getElementById('grand-total-val').innerText = '$'+(subtotal*1.15).toLocaleString();
+}
+
+// Initialize Everything on Load
         window.onload = () => {
             renderLineItems();
             renderClients();

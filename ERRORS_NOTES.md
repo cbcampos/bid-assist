@@ -32,3 +32,7 @@
 2. Check for duplicate lines: `grep "pattern" file | wc -l`
 3. Copy to static folder
 4. Test in incognito/private mode
+
+## 7. Always Commit Before Major Changes
+**Problem:** Lost full-featured version when repeatedly breaking/restoring.
+**Fix:** Commit to git after any significant change so you can restore.
