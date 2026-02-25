@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BidAssist - Excavation Bidding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5632;
+            --primary-light: #2a7a4a;
+            --accent: #007580;
+            --surface: #ffffff;
+            --background: #f5f7f6;
+            --text: #1a1a1a;
+            --text-secondary: #5a6a6a;
+            --border: #e0e8e5;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.5rem; font-weight: 700; }
+        .header .subtitle { opacity: 0.8; font-size: 0.9rem; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .stat-label { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; }
+        
+        .section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .section-title { font-weight: 600; font-size: 1.1rem; }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-light); }
+        .btn-secondary { background: var(--surface); border: 1px solid var(--border); }
+        
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+        .project-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .project-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .project-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .project-client { color: var(--text-secondary); font-size: 0.9rem; }
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        .project-total { font-weight: 700; color: var(--primary); }
+        
+        .badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .badge-draft { background: #fef3c7; color: #92400e; }
+        .badge-submitted { background: #dbeafe; color: #1e40af; }
+        .badge-won { background: #dcfce7; color: #166534; }
+        .badge-lost { background: #fee2e2; color: #991b1b; }
+        
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { font-weight: 600; color: var(--text-secondary); font-size: 0.85rem; }
+        .text-right { text-align: right; }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+        
+        @media (max-width: 768px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .form-row { grid-template-columns: 1fr; }
+            .container { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>BidAssist</h1>
+            <div class="subtitle">Excavation Bidding Made Simple</div>
+        </div>
+        <button class="btn btn-primary" onclick="showNewProject()">+ New Project</button>
+    </div>
+    
+    <div class="container">
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalProjects">0</div>
+                <div class="stat-label">Total Projects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeBids">0</div>
+                <div class="stat-label">Active Bids</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="wonThisMonth">$0</div>
+                <div class="stat-label">Won This Month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="pendingAmount">$0</div>
+                <div class="stat-label">Pending Amount</div>
+            </div>
+        </div>
+        
+        <!-- Projects -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">Projects</div>
+            </div>
+            <div class="project-grid" id="projectList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <div>No projects yet</div>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-primary" onclick="showNewProject()">Create First Project</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Rate Card -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">Rate Card</div>
+                <button class="btn btn-secondary" onclick="addRate()">+ Add Rate</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th class="text-right">Unit Cost</th>
+                        <th>Unit</th>
+                    </tr>
+                </thead>
+                <tbody id="rateList">
+                    <tr>
+                        <td>Excavation</td>
+                        <td>Standard excavation, common soil</td>
+                        <td class="text-right">$45.00</td>
+                        <td>cu yd</td>
+                    </tr>
+                    <tr>
+                        <td>Backfill</td>
+                        <td>Backfill with native material</td>
+                        <td class="text-right">$18.00</td>
+                        <td>cu yd</td>
+                    </tr>
+                    <tr>
+                        <td>Import Fill</td>
+                        <td>Import and place select material</td>
+                        <td class="text-right">$32.00</td>
+                        <td>cu yd</td>
+                    </tr>
+                    <tr>
+                        <td>Trench Box</td>
+                        <td>Trench box rental and setup</td>
+                        <td class="text-right">$250.00</td>
+                        <td>day</td>
+                    </tr>
+                    <tr>
+                        <td>Operator</td>
+                        <td>Equipment operator</td>
+                        <td class="text-right">$65.00</td>
+                        <td>hr</td>
+                    </tr>
+                    <tr>
+                        <td>Haul Off</td>
+                        <td>Haul excavated material offsite</td>
+                        <td class="text-right">$28.00</td>
+                        <td>cu yd</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- New Project Modal -->
+    <div id="projectModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:white; padding:2rem; border-radius:12px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto;">
+            <h2 style="margin-bottom:1.5rem;">New Project</h2>
+            <form id="projectForm">
+                <div class="form-group">
+                    <label class="form-label">Project Name</label>
+                    <input type="text" class="form-input" name="name" required placeholder="e.g., Smith Residence">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Client</label>
+                        <input type="text" class="form-input" name="client" required placeholder="Client name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Bid Deadline</label>
+                        <input type="date" class="form-input" name="deadline" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-input" name="address" placeholder="Project address">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Overhead %</label>
+                        <input type="number" class="form-input" name="overhead" value="15" min="0" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Profit %</label>
+                        <input type="number" class="form-input" name="profit" value="10" min="0" max="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea class="form-input" name="notes" rows="3" placeholder="Additional notes..."></textarea>
+                </div>
+                <div style="display:flex; gap:1rem; justify-content:flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Sample data
+        const projects = [
+            {
+                id: 1,
+                name: "Highland Park Subdivision",
+                client: "ABC Development",
+                deadline: "2026-03-15",
+                total: 45000,
+                status: "submitted"
+            },
+            {
+                id: 2,
+                name: "Downtown Sewer Main",
+                client: "City of Montgomery",
+                deadline: "2026-03-01",
+                total: 125000,
+                status: "draft"
+            }
+        ];
+        
+        function renderProjects() {
+            const list = document.getElementById('projectList');
+            if (projects.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <div>No projects yet</div>
+                        <div style="margin-top:1rem;">
+                            <button class="btn btn-primary" onclick="showNewProject()">Create First Project</button>
+                        </div>
+                    </div>`;
+                return;
+            }
+            list.innerHTML = projects.map(p => `
+                <div class="project-card" onclick="viewProject(${p.id})">
+                    <div class="project-name">${p.name}</div>
+                    <div class="project-client">${p.client}</div>
+                    <div class="project-meta">
+                        <span>Due: ${new Date(p.deadline).toLocaleDateString()}</span>
+                        <span class="badge badge-${p.status}">${p.status}</span>
+                    </div>
+                    <div class="project-total">$${p.total.toLocaleString()}</div>
+                </div>`).join('');
+        }
+        
+        function renderStats() {
+            document.getElementById('totalProjects').textContent = projects.length;
+            document.getElementById('activeBids').textContent = projects.filter(p => p.status === 'draft' || p.status === 'submitted').length;
+            document.getElementById('pendingAmount').textContent = '$' + projects.filter(p => p.status === 'submitted').reduce((sum, p) => sum + p.total, 0).toLocaleString();
+        }
+        
+        function showNewProject() {
+            document.getElementById('projectModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('projectModal').style.display = 'none';
+        }
+        
+        function viewProject(id) {
+            alert('Project details coming soon! ID: ' + id);
+        }
+        
+        function addRate() {
+            alert('Add rate coming soon!');
+        }
+        
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const project = {
+                id: projects.length + 1,
+                name: formData.get('name'),
+                client: formData.get('client'),
+                deadline: formData.get('deadline'),
+                total: 0,
+                status: 'draft'
+            };
+            projects.push(project);
+            renderProjects();
+            renderStats();
+            closeModal();
+            e.target.reset();
+        });
+        
+        renderProjects();
+        renderStats();
+    </script>
+</body>
+</html>
