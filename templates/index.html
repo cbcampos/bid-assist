@@ -21,367 +21,308 @@
             --radius: 12px;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--background); color: var(--text); min-height: 100vh; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.5rem; font-weight: 700; }
+        .header .subtitle { opacity: 0.8; font-size: 0.9rem; }
         
-        /* Header */
-        .header { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { font-size: 1.3rem; font-weight: 700; }
-        .header-links { display: flex; gap: 1rem; }
-        .header-links button { background: none; border: none; color: white; cursor: pointer; font-size: 0.9rem; opacity: 0.8; }
-        .header-links button:hover, .header-links button.active { opacity: 1; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         
-        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .stat-label { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; }
         
-        /* Stats */
-        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-        .stat-card { background: var(--surface); padding: 1rem; border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-        .stat-label { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem; }
+        .section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .section-title { font-weight: 600; font-size: 1.1rem; }
         
-        /* Cards */
-        .card { background: var(--surface); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .card-title { font-weight: 600; font-size: 1rem; }
-        
-        /* Buttons */
-        .btn { padding: 0.5rem 1rem; border-radius: 8px; border: none; font-weight: 500; cursor: pointer; font-size: 0.85rem; }
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
         .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-light); }
-        .btn-secondary { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
-        .btn-success { background: var(--success); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+        .btn-secondary { background: var(--surface); border: 1px solid var(--border); }
         
-        /* Forms */
-        .form-group { margin-bottom: 0.75rem; }
-        .form-label { display: block; font-weight: 500; margin-bottom: 0.3rem; font-size: 0.85rem; }
-        .form-input { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-        
-        /* Projects Grid */
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-        .project-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; cursor: pointer; transition: all 0.2s; }
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+        .project-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
         .project-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .project-name { font-weight: 600; font-size: 1rem; margin-bottom: 0.25rem; }
-        .project-client { color: var(--text-secondary); font-size: 0.85rem; }
-        .project-meta { display: flex; justify-content: space-between; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+        .project-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .project-client { color: var(--text-secondary); font-size: 0.9rem; }
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
         .project-total { font-weight: 700; color: var(--primary); }
         
-        /* Badge */
-        .badge { padding: 0.2rem 0.5rem; border-radius: 20px; font-size: 0.7rem; font-weight: 500; }
+        .badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
         .badge-draft { background: #fef3c7; color: #92400e; }
         .badge-submitted { background: #dbeafe; color: #1e40af; }
         .badge-won { background: #dcfce7; color: #166534; }
         .badge-lost { background: #fee2e2; color: #991b1b; }
         
-        /* Tables */
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 0.6rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
-        th { font-weight: 600; color: var(--text-secondary); font-size: 0.75rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { font-weight: 600; color: var(--text-secondary); font-size: 0.85rem; }
         .text-right { text-align: right; }
         
-        /* Modal */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; }
-        .modal { background: white; padding: 1.5rem; border-radius: var(--radius); max-width: 500px; width: 95%; max-height: 90vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .modal-header h2 { font-size: 1.1rem; }
-        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
         
-        /* Project Detail */
-        .detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
-        .detail-title { font-size: 1.5rem; font-weight: 700; }
-        .detail-client { color: var(--text-secondary); margin-top: 0.25rem; }
-        .detail-actions { display: flex; gap: 0.5rem; }
-        
-        .totals-card { background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); color: white; padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem; }
-        .totals-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1rem; }
-        .total-item { text-align: center; }
-        .total-label { font-size: 0.75rem; opacity: 0.9; }
-        .total-value { font-size: 1.25rem; font-weight: 700; }
-        
-        /* Line Items */
-        .line-item-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; }
-        .line-item-row input { padding: 0.4rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; }
-        
-        /* History */
-        .history-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-        .history-stat { text-align: center; padding: 1rem; background: var(--surface); border-radius: var(--radius); }
-        
-        /* Empty */
-        .empty-state { text-align: center; padding: 2rem; color: var(--text-secondary); }
-        .empty-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-        
-        /* Tabs */
-        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-        .tab { padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; font-weight: 500; color: var(--text-secondary); border-bottom: 2px solid transparent; }
-        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
-        
-        /* Mobile */
         @media (max-width: 768px) {
             .stats { grid-template-columns: repeat(2, 1fr); }
             .form-row { grid-template-columns: 1fr; }
-            .projects-grid { grid-template-columns: 1fr; }
-            .totals-grid { grid-template-columns: repeat(2, 1fr); }
-            .line-item-row { grid-template-columns: 1fr; gap: 0.25rem; }
+            .container { padding: 1rem; }
         }
-    
-        /* Print Styles */
-        @media print {
-            body { background: white; padding: 0; }
-            .header, .card, .stats, .btn, .modal-overlay { display: none !important; }
-            #print-area { display: block !important; }
-            .no-print { display: none; }
-        }
-        /* Print Area */
-        #print-area { display: none; padding: 40px; max-width: 800px; margin: 0 auto; }
-        .print-header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #1a5632; padding-bottom: 20px; }
-        .print-company { font-size: 28px; font-weight: bold; color: #1a5632; }
-        .print-title { font-size: 20px; margin-top: 10px; }
-        .print-info { margin: 20px 0; }
-        .print-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        .print-table th, .print-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        .print-table th { background: #1a5632; color: white; }
-        .print-totals { margin-top: 20px; text-align: right; }
-        .print-total-row { padding: 5px 0; }
-        .print-grand-total { font-size: 24px; font-weight: bold; color: #1a5632; border-top: 2px solid #1a5632; padding-top: 10px; }
-        .print-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #666; }
-        </style>
+    </style>
 </head>
 <body>
     <div class="header">
-        <h1>BidAssist</h1>
-        <div class="header-links">
-            <button class="active" onclick="showView('dashboard')">Projects</button>
-            <button onclick="showView('history')">History</button>
-            <button onclick="showView('rates')">Rate Card</button>
+        <div>
+            <h1>BidAssist</h1>
+            <div class="subtitle">Excavation Bidding Made Simple</div>
         </div>
+        <button class="btn btn-primary" onclick="showNewProject()">+ New Project</button>
     </div>
     
-    <!-- Dashboard View -->
-    <div id="dashboard-view" class="container">
+    <div class="container">
+        <!-- Stats -->
         <div class="stats">
-            <div class="stat-card"><div class="stat-value" id="stat-total">0</div><div class="stat-label">Total Projects</div></div>
-            <div class="stat-card"><div class="stat-value" id="stat-active">0</div><div class="stat-label">Active Bids</div></div>
-            <div class="stat-card"><div class="stat-value" id="stat-won">$0</div><div class="stat-label">Won This Month</div></div>
-            <div class="stat-card"><div class="stat-value" id="stat-pending">$0</div><div class="stat-label">Pending</div></div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalProjects">0</div>
+                <div class="stat-label">Total Projects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeBids">0</div>
+                <div class="stat-label">Active Bids</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="wonThisMonth">$0</div>
+                <div class="stat-label">Won This Month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="pendingAmount">$0</div>
+                <div class="stat-label">Pending Amount</div>
+            </div>
         </div>
         
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">Projects</div>
-                <button class="btn btn-primary" onclick="showNewProject()">+ New Project</button>
+        <!-- Projects -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">Projects</div>
             </div>
-            <div class="projects-grid" id="projectList"></div>
+            <div class="project-grid" id="projectList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <div>No projects yet</div>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-primary" onclick="showNewProject()">Create First Project</button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    
-    <!-- History View -->
-    <div id="history-view" class="container" style="display:none;">
-        <div class="history-stats">
-            <div class="history-stat"><div class="stat-value" id="hist-winrate">0%</div><div class="stat-label">Win Rate</div></div>
-            <div class="history-stat"><div class="stat-value" id="hist-avg">$0</div><div class="stat-label">Avg Bid</div></div>
-            <div class="history-stat"><div class="stat-value" id="hist-total">$0</div><div class="stat-label">Total Revenue</div></div>
-        </div>
-        <div class="card">
-            <div class="card-title">Bid History</div>
+        
+        <!-- Rate Card -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">Rate Card</div>
+                <button class="btn btn-secondary" onclick="addRate()">+ Add Rate</button>
+            </div>
             <table>
-                <thead><tr><th>Project</th><th>Client</th><th>Bid Amount</th><th>Status</th><th>Date</th></tr></thead>
-                <tbody id="historyList"></tbody>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th class="text-right">Unit Cost</th>
+                        <th>Unit</th>
+                    </tr>
+                </thead>
+                <tbody id="rateList">
+                    <tr>
+                        <td>Excavation</td>
+                        <td>Standard excavation, common soil</td>
+                        <td class="text-right">$45.00</td>
+                        <td>cu yd</td>
+                    </tr>
+                    <tr>
+                        <td>Backfill</td>
+                        <td>Backfill with native material</td>
+                        <td class="text-right">$18.00</td>
+                        <td>cu yd</td>
+                    </tr>
+                    <tr>
+                        <td>Import Fill</td>
+                        <td>Import and place select material</td>
+                        <td class="text-right">$32.00</td>
+                        <td>cu yd</td>
+                    </tr>
+                    <tr>
+                        <td>Trench Box</td>
+                        <td>Trench box rental and setup</td>
+                        <td class="text-right">$250.00</td>
+                        <td>day</td>
+                    </tr>
+                    <tr>
+                        <td>Operator</td>
+                        <td>Equipment operator</td>
+                        <td class="text-right">$65.00</td>
+                        <td>hr</td>
+                    </tr>
+                    <tr>
+                        <td>Haul Off</td>
+                        <td>Haul excavated material offsite</td>
+                        <td class="text-right">$28.00</td>
+                        <td>cu yd</td>
+                    </tr>
+                </tbody>
             </table>
-        </div>
-    </div>
-    
-    <!-- Rate Card View -->
-    <div id="rates-view" class="container" style="display:none;">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">Rate Card</div>
-                <button class="btn btn-primary" onclick="showAddRate()">+ Add Rate</button>
-            </div>
-            <table>
-                <thead><tr><th>Category</th><th>Description</th><th class="text-right">Unit Cost</th><th>Unit</th><th></th></tr></thead>
-                <tbody id="rateList"></tbody>
-            </table>
-        </div>
-    </div>
-    
-    <!-- Project Detail View -->
-    <div id="detail-view" class="container" style="display:none;">
-        <button class="btn btn-secondary" onclick="showView('dashboard')" style="margin-bottom:1rem;">← Back to Projects</button>
-        
-        <div class="detail-header">
-            <div>
-                <div class="detail-title" id="detail-name"></div>
-                <div class="detail-client" id="detail-client"></div>
-            </div>
-            <div class="detail-actions">
-                <button class="btn btn-success btn-sm" onclick="updateStatus('won')">Mark Won</button>
-                <button class="btn btn-danger btn-sm" onclick="updateStatus('lost')">Mark Lost</button>
-                <button class="btn btn-secondary btn-sm" onclick="copyToClipboard()">Copy Bid</button><button class="btn btn-primary btn-sm" onclick="printBid()">Print/PDF</button>
-            </div>
-        </div>
-        
-        <div class="totals-card">
-            <div>Bid Total</div>
-            <div class="totals-grid">
-                <div class="total-item"><div class="total-label">Subtotal</div><div class="total-value" id="total-sub">$0</div></div>
-                <div class="total-item"><div class="total-label">Overhead</div><div class="total-value" id="total-overhead">$0</div></div>
-                <div class="total-item"><div class="total-label">Profit</div><div class="total-value" id="total-profit">$0</div></div>
-                <div class="total-item"><div class="total-label">Total</div><div class="total-value" id="total-final">$0</div></div>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">Line Items</div>
-                <button class="btn btn-primary btn-sm" onclick="addLineItem()">+ Add Item</button>
-            </div>
-            <div id="lineItems"></div>
         </div>
     </div>
     
     <!-- New Project Modal -->
-    <div id="project-modal" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header"><h2>New Project</h2><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div id="projectModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:white; padding:2rem; border-radius:12px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto;">
+            <h2 style="margin-bottom:1.5rem;">New Project</h2>
             <form id="projectForm">
-                <div class="form-group"><label class="form-label">Project Name</label><input type="text" class="form-input" name="name" required></div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Client</label><input type="text" class="form-input" name="client" required></div>
-                    <div class="form-group"><label class="form-label">Deadline</label><input type="date" class="form-input" name="deadline" required></div>
+                <div class="form-group">
+                    <label class="form-label">Project Name</label>
+                    <input type="text" class="form-input" name="name" required placeholder="e.g., Smith Residence">
                 </div>
-                <div class="form-group"><label class="form-label">Address</label><input type="text" class="form-input" name="address"></div>
                 <div class="form-row">
-                    <div class="form-group"><label class="form-label">Overhead %</label><input type="number" class="form-input" name="overhead" value="15" min="0"></div>
-                    <div class="form-group"><label class="form-label">Profit %</label><input type="number" class="form-input" name="profit" value="10" min="0"></div>
+                    <div class="form-group">
+                        <label class="form-label">Client</label>
+                        <input type="text" class="form-input" name="client" required placeholder="Client name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Bid Deadline</label>
+                        <input type="date" class="form-input" name="deadline" required>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width:100%">Create Project</button><button class="btn btn-secondary" onclick="showTemplates()">Load Template</button>
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-input" name="address" placeholder="Project address">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Overhead %</label>
+                        <input type="number" class="form-input" name="overhead" value="15" min="0" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Profit %</label>
+                        <input type="number" class="form-input" name="profit" value="10" min="0" max="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea class="form-input" name="notes" rows="3" placeholder="Additional notes..."></textarea>
+                </div>
+                <div style="display:flex; gap:1rem; justify-content:flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
             </form>
         </div>
     </div>
     
-    <!-- Add Rate Modal -->
-    <div id="rate-modal" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header"><h2>Add Rate</h2><button class="modal-close" onclick="closeModal()">×</button></div>
-            <form id="rateForm">
-                <div class="form-group"><label class="form-label">Category</label><input type="text" class="form-input" name="category" placeholder="e.g., Excavation" required></div>
-                <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" name="description"></div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Unit Cost</label><input type="number" class="form-input" name="unit_cost" step="0.01" required></div>
-                    <div class="form-group"><label class="form-label">Unit</label><input type="text" class="form-input" name="unit" placeholder="cu yd, LF, day" required></div>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width:100%">Add Rate</button>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Add Line Item Modal -->
-    <div id="item-modal" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header"><h2>Add Line Item</h2><button class="modal-close" onclick="closeModal()">×</button></div>
-            <form id="itemForm">
-                <div class="form-group"><label class="form-label">Category</label><select class="form-input" name="category" id="item-category"></select></div>
-                <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" name="description"></div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Quantity</label><input type="number" class="form-input" name="quantity" step="0.01" required></div>
-                    <div class="form-group"><label class="form-label">Unit Cost</label><input type="number" class="form-input" name="unit_cost" step="0.01" required></div>
-                </div>
-                <div class="form-group"><label class="form-label">Markup %</label><input type="number" class="form-input" name="markup" value="0"></div>
-                <button type="submit" class="btn btn-primary" style="width:100%">Add Item</button>
-            </form>
-        </div>
-    </div>
-
     <script>
-        const API = '';
-        let projects = [], rates = [], currentProject = null;
-        
-        // 5B Contracting Sample Data
-        const sampleProjects = [
-        
-        const projectTemplates = [
-            {id:"residential",name:"Residential Site Work",overhead:15,profit:15,items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:5000,unit_cost:4,markup:0},{category:"Excavation",description:"Foundation excavation",quantity:800,unit_cost:5.5,markup:0},{category:"Backfill",description:"Foundation backfill",quantity:400,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway base",quantity:300,unit_cost:35,markup:0},{category:"Final Grade",description:"Finish grading",quantity:1,unit_cost:2500,markup:0}]},
-            {id:"commercial",name:"Commercial Site Work",overhead:18,profit:18,items:[{category:"Excavation",description:"Building pad",quantity:15000,unit_cost:4.5,markup:0},{category:"Excavation",description:"Parking lot",quantity:8000,unit_cost:4,markup:0},{category:"Backfill",description:"Structural backfill",quantity:6000,unit_cost:22,markup:0},{category:"Import Fill",description:"Select fill",quantity:5000,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess material",quantity:8000,unit_cost:28,markup:0},{category:"Final Grade",description:"Athletic field",quantity:3,unit_cost:3000,markup:0}]},
-            {id:"utility",name:"Utility Line Installation",overhead:15,profit:12,items:[{category:"Excavation",description:"Water main trench",quantity:1000,unit_cost:6.5,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:800,unit_cost:7,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:1200,unit_cost:24,markup:0},{category:"Trench Box",description:"Trench safety",quantity:10,unit_cost:250,markup:0},{category:"Operator",description:"Utility crew",quantity:40,unit_cost:70,markup:0}]}
-        ];
-            {id:1,name:"Eastdale Commons Shopping Center",client:"Coleman Development Group",address:"2800 Eastdale Circle, Montgomery, AL 36117",deadline:"2026-03-15",total:87500,status:"submitted",overhead:15,profit:12,line_items:[{category:"Excavation",description:"Building pad excavation",quantity:4500,unit_cost:4.5,markup:0},{category:"Excavation",description:"Storm drain trench",quantity:1200,unit_cost:5.5,markup:0},{category:"Backfill",description:"Backfill for utilities",quantity:2800,unit_cost:18,markup:0},{category:"Import Fill",description:"Select fill for parking area",quantity:3200,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess soil removal",quantity:1900,unit_cost:28,markup:0},{category:"Trench Box",description:"Trench safety rental",quantity:8,unit_cost:250,markup:0},{category:"Operator",description:"Operator - 3 crew members",quantity:40,unit_cost:65,markup:0}]},
-            {id:2,name:"Hillside Residential - Phase 2",client:"Southern Homes LLC",address:"4500 Hillside Dr, Montgomery, AL 36109",deadline:"2026-03-08",total:142000,status:"won",overhead:15,profit:15,line_items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:8500,unit_cost:4,markup:0},{category:"Excavation",description:"Street cut and grading",quantity:4200,unit_cost:4.2,markup:0},{category:"Backfill",description:"Utility trench backfill",quantity:5600,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway stone",quantity:1800,unit_cost:35,markup:0},{category:"Haul Off",description:"Debris and stumps",quantity:420,unit_cost:45,markup:0},{category:"Operator",description:"Equipment operators",quantity:85,unit_cost:65,markup:0},{category:"Final Grade",description:"Finish grading",quantity:2.5,unit_cost:2500,markup:0}]},
-            {id:3,name:"Downtown Montgomery Mixed-Use",client:"Capital City Developers",address:"125 Commerce Street, Montgomery, AL 36104",deadline:"2026-03-20",total:225000,status:"draft",overhead:18,profit:18,line_items:[{category:"Excavation",description:"Deep foundation excavation",quantity:6800,unit_cost:6.5,markup:0},{category:"Excavation",description:"Basement parking",quantity:4200,unit_cost:5.8,markup:0},{category:"Backfill",description:"Structural backfill",quantity:5200,unit_cost:22,markup:0},{category:"Import Fill",description:"CLSM",quantity:1200,unit_cost:65,markup:0},{category:"Haul Off",description:"Rock and excess soil",quantity:5800,unit_cost:32,markup:0},{category:"Trench Box",description:"Commercial trench box",quantity:15,unit_cost:350,markup:0},{category:"Operator",description:"Specialized operators",quantity:120,unit_cost:75,markup:0},{category:"Dewatering",description:"Well point system",quantity:1,unit_cost:8500,markup:0}]},
-            {id:4,name:"VA Hospital Parking Expansion",client:"US Dept of Veterans Affairs",address:"215 Perry Hill Rd, Montgomery, AL 36109",deadline:"2026-02-28",total:67500,status:"submitted",overhead:12,profit:8,line_items:[{category:"Excavation",description:"Asphalt removal",quantity:2800,unit_cost:2.5,markup:0},{category:"Excavation",description:"Gravel base excavation",quantity:1900,unit_cost:4.8,markup:0},{category:"Import Fill",description:"Crushed limestone base",quantity:2200,unit_cost:38,markup:0},{category:"Haul Off",description:"Asphalt and base",quantity:450,unit_cost:35,markup:0},{category:"Operator",description:"2 operators",quantity:32,unit_cost:65,markup:0}]},
-            {id:5,name:"River Region Medical Utility",client:"River Region Health System",address:"100 Medical Center Dr, Montgomery, AL 36117",deadline:"2026-02-20",total:45000,status:"lost",overhead:15,profit:10,line_items:[{category:"Excavation",description:"Water main trench",quantity:850,unit_cost:6.8,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:620,unit_cost:7.2,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:980,unit_cost:24,markup:0},{category:"Haul Off",description:"Material",quantity:490,unit_cost:28,markup:0},{category:"Operator",description:"Utility crew",quantity:28,unit_cost:70,markup:0}]},
-            {id:6,name:"AUM Site Prep",client:"Auburn University at Montgomery",address:"7400 Eastbrook Dr, Montgomery, AL 36117",deadline:"2026-04-01",total:185000,status:"submitted",overhead:15,profit:14,line_items:[{category:"Excavation",description:"Athletic fields",quantity:12500,unit_cost:4.2,markup:0},{category:"Excavation",description:"Parking lot subgrade",quantity:5800,unit_cost:4.5,markup:0},{category:"Backfill",description:"General backfill",quantity:8200,unit_cost:18,markup:0},{category:"Import Fill",description:"Athletic field mix",quantity:4500,unit_cost:42,markup:0},{category:"Haul Off",description:"Excess cut",quantity:6800,unit_cost:26,markup:0},{category:"Operator",description:"Full crew - 5 operators",quantity:95,unit_cost:68,markup:0},{category:"Final Grade",description:"Fine grade and seed prep",quantity:4.2,unit_cost:3200,markup:0}]},
-            {id:7,name:"Maxwell AFB - Building 805",client:"US Air Force / DCMA",address:"Maxwell AFB, Montgomery, AL 36112",deadline:"2026-03-10",total:38000,status:"won",overhead:15,profit:12,line_items:[{category:"Excavation",description:"HVAC unit pads",quantity:180,unit_cost:8.5,markup:0},{category:"Excavation",description:"Generator pad",quantity:85,unit_cost:9.2,markup:0},{category:"Backfill",description:"Utility backfill",quantity:320,unit_cost:22,markup:0},{category:"Concrete",description:"Pad forming and pour",quantity:12,unit_cost:850,markup:0},{category:"Operator",description:"Small crew",quantity:18,unit_cost:65,markup:0}]},
-            {id:8,name:"ASU Storm Drain",client:"Alabama State University",address:"915 Jackson St, Montgomery, AL 36104",deadline:"2026-03-25",total:92000,status:"draft",overhead:15,profit:12,line_items:[{category:"Excavation",description:"Storm drain trench",quantity:2400,unit_cost:6.2,markup:0},{category:"Excavation",description:"Inlet structures",quantity:18,unit_cost:450,markup:0},{category:"Backfill",description:"Trench backfill",quantity:1800,unit_cost:20,markup:0},{category:"Haul Off",description:"Excess soil",quantity:600,unit_cost:30,markup:0},{category:"Operator",description:"Utility crew",quantity:45,unit_cost:68,markup:0}]}
-        ];
-        
-        // Load data
-        async function loadProjects() {
-            try {
-                const res = await fetch(API + '/api/projects');
-                const data = await res.json();
-                projects = sampleProjects;
-        
-        const projectTemplates = [
-            {id:"residential",name:"Residential Site Work",overhead:15,profit:15,items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:5000,unit_cost:4,markup:0},{category:"Excavation",description:"Foundation excavation",quantity:800,unit_cost:5.5,markup:0},{category:"Backfill",description:"Foundation backfill",quantity:400,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway base",quantity:300,unit_cost:35,markup:0},{category:"Final Grade",description:"Finish grading",quantity:1,unit_cost:2500,markup:0}]},
-            {id:"commercial",name:"Commercial Site Work",overhead:18,profit:18,items:[{category:"Excavation",description:"Building pad",quantity:15000,unit_cost:4.5,markup:0},{category:"Excavation",description:"Parking lot",quantity:8000,unit_cost:4,markup:0},{category:"Backfill",description:"Structural backfill",quantity:6000,unit_cost:22,markup:0},{category:"Import Fill",description:"Select fill",quantity:5000,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess material",quantity:8000,unit_cost:28,markup:0},{category:"Final Grade",description:"Athletic field",quantity:3,unit_cost:3000,markup:0}]},
-            {id:"utility",name:"Utility Line Installation",overhead:15,profit:12,items:[{category:"Excavation",description:"Water main trench",quantity:1000,unit_cost:6.5,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:800,unit_cost:7,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:1200,unit_cost:24,markup:0},{category:"Trench Box",description:"Trench safety",quantity:10,unit_cost:250,markup:0},{category:"Operator",description:"Utility crew",quantity:40,unit_cost:70,markup:0}]}
-        ];
-                if (projects.length === 0) projects = sampleProjects;
-        
-        const projectTemplates = [
-            {id:"residential",name:"Residential Site Work",overhead:15,profit:15,items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:5000,unit_cost:4,markup:0},{category:"Excavation",description:"Foundation excavation",quantity:800,unit_cost:5.5,markup:0},{category:"Backfill",description:"Foundation backfill",quantity:400,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway base",quantity:300,unit_cost:35,markup:0},{category:"Final Grade",description:"Finish grading",quantity:1,unit_cost:2500,markup:0}]},
-            {id:"commercial",name:"Commercial Site Work",overhead:18,profit:18,items:[{category:"Excavation",description:"Building pad",quantity:15000,unit_cost:4.5,markup:0},{category:"Excavation",description:"Parking lot",quantity:8000,unit_cost:4,markup:0},{category:"Backfill",description:"Structural backfill",quantity:6000,unit_cost:22,markup:0},{category:"Import Fill",description:"Select fill",quantity:5000,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess material",quantity:8000,unit_cost:28,markup:0},{category:"Final Grade",description:"Athletic field",quantity:3,unit_cost:3000,markup:0}]},
-            {id:"utility",name:"Utility Line Installation",overhead:15,profit:12,items:[{category:"Excavation",description:"Water main trench",quantity:1000,unit_cost:6.5,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:800,unit_cost:7,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:1200,unit_cost:24,markup:0},{category:"Trench Box",description:"Trench safety",quantity:10,unit_cost:250,markup:0},{category:"Operator",description:"Utility crew",quantity:40,unit_cost:70,markup:0}]}
-        ];
-            } catch(e) { projects = sampleProjects; }
-        
-        const projectTemplates = [
-            {id:"residential",name:"Residential Site Work",overhead:15,profit:15,items:[{category:"Excavation",description:"Lot clearing and grubbing",quantity:5000,unit_cost:4,markup:0},{category:"Excavation",description:"Foundation excavation",quantity:800,unit_cost:5.5,markup:0},{category:"Backfill",description:"Foundation backfill",quantity:400,unit_cost:18,markup:0},{category:"Import Fill",description:"Driveway base",quantity:300,unit_cost:35,markup:0},{category:"Final Grade",description:"Finish grading",quantity:1,unit_cost:2500,markup:0}]},
-            {id:"commercial",name:"Commercial Site Work",overhead:18,profit:18,items:[{category:"Excavation",description:"Building pad",quantity:15000,unit_cost:4.5,markup:0},{category:"Excavation",description:"Parking lot",quantity:8000,unit_cost:4,markup:0},{category:"Backfill",description:"Structural backfill",quantity:6000,unit_cost:22,markup:0},{category:"Import Fill",description:"Select fill",quantity:5000,unit_cost:32,markup:0},{category:"Haul Off",description:"Excess material",quantity:8000,unit_cost:28,markup:0},{category:"Final Grade",description:"Athletic field",quantity:3,unit_cost:3000,markup:0}]},
-            {id:"utility",name:"Utility Line Installation",overhead:15,profit:12,items:[{category:"Excavation",description:"Water main trench",quantity:1000,unit_cost:6.5,markup:0},{category:"Excavation",description:"Sewer main trench",quantity:800,unit_cost:7,markup:0},{category:"Backfill",description:"Pipe zone backfill",quantity:1200,unit_cost:24,markup:0},{category:"Trench Box",description:"Trench safety",quantity:10,unit_cost:250,markup:0},{category:"Operator",description:"Utility crew",quantity:40,unit_cost:70,markup:0}]}
-        ];
-            renderProjects();
-            renderStats();
-        }
-        
-        async function loadRates() {
-            try {
-                const res = await fetch(API + '/api/rates');
-                const data = await res.json();
-                rates = data.data || [];
-            } catch(e) { rates = defaultRates; }
-            renderRates();
-            updateCategorySelect();
-        }
-        
-        const defaultRates = [
-            {id:1,category:'Excavation',description:'Standard cut (common soil)',unit_cost:4.50,unit:'cu yd'},
-            {id:2,category:'Excavation',description:'Rock excavation (requires blasting)',unit_cost:12.00,unit:'cu yd'},
-            {id:3,category:'Excavation',description:'Trench digging (utility lines)',unit_cost:6.50,unit:'LF'},
-            {id:4,category:'Excavation',description:'Grading cut',unit_cost:4.20,unit:'cu yd'},
-            {id:5,category:'Backfill',description:'Native backfill',unit_cost:18.00,unit:'cu yd'},
-            {id:6,category:'Backfill',description:'Select backfill (sand/gravel)',unit_cost:24.00,unit:'cu yd'},
-            {id:7,category:'Import Fill',description:'Select fill material delivered',unit_cost:32.00,unit:'cu yd'},
-            {id:8,category:'Import Fill',description:'Crushed limestone',unit_cost:38.00,unit:'cu yd'},
-            {id:9,category:'Import Fill',description:'Topsoil',unit_cost:28.00,unit:'cu yd'},
-            {id:10,category:'Haul Off',description:'Excess soil hauling',unit_cost:28.00,unit:'cu yd'},
-            {id:11,category:'Haul Off',description:'Rock hauling',unit_cost:35.00,unit:'cu yd'},
-            {id:12,category:'Trench Box',description:'Trench box rental/day',unit_cost:250.00,unit:'day'},
-            {id:13,category:'Operator',description:'Equipment operator',unit_cost:65.00,unit:'hr'},
-            {id:14,category:'Operator',description:'Skilled operator (excavator)',unit_cost:75.00,unit:'hr'},
-            {id:15,category:'Final Grade',description:'Finish grading/seed prep',unit_cost:3200.00,unit:'acre'},
-            {id:16,category:'Dewatering',description:'Well point system',unit_cost:8500.00,unit:'job'},
-            {id:17,category:'Concrete',description:'Concrete pad forming/pour',unit_cost:850.00,unit:'cu yd'},
-            {id:18,category:'Erosion Control',description:'Silt fence installation',unit_cost:2.50,unit:'LF'}
+        // Sample data
+        const projects = [
+            {
+                id: 1,
+                name: "Highland Park Subdivision",
+                client: "ABC Development",
+                deadline: "2026-03-15",
+                total: 45000,
+                status: "submitted"
+            },
+            {
+                id: 2,
+                name: "Downtown Sewer Main",
+                client: "City of Montgomery",
+                deadline: "2026-03-01",
+                total: 125000,
+                status: "draft"
+            }
         ];
         
-        // Render
         function renderProjects() {
             const list = document.getElementById('projectList');
-            if (!projects.length) {
-                list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div>No projects yet</div><button class="btn btn-primary" onclick="showNewProject()" style="margin-top:1rem">Create First Project</button></div>';
+            if (projects.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <div>No projects yet</div>
+                        <div style="margin-top:1rem;">
+                            <button class="btn btn-primary" onclick="showNewProject()">Create First Project</button>
+                        </div>
+                    </div>`;
                 return;
             }
             list.innerHTML = projects.map(p => `
@@ -389,271 +330,55 @@
                     <div class="project-name">${p.name}</div>
                     <div class="project-client">${p.client}</div>
                     <div class="project-meta">
-                        <span>${p.deadline ? new Date(p.deadline).toLocaleDateString() : 'No deadline'}</span>
+                        <span>Due: ${new Date(p.deadline).toLocaleDateString()}</span>
                         <span class="badge badge-${p.status}">${p.status}</span>
                     </div>
-                    <div class="project-total">$${(p.total || 0).toLocaleString()}</div>
+                    <div class="project-total">$${p.total.toLocaleString()}</div>
                 </div>`).join('');
         }
         
         function renderStats() {
-            const active = projects.filter(p => p.status === 'draft' || p.status === 'submitted').length;
-            const won = projects.filter(p => p.status === 'won');
-            const wonThisMonth = won.filter(p => new Date(p.updated_at).getMonth() === new Date().getMonth()).reduce((s,p) => s + (p.total||0), 0);
-            const pending = projects.filter(p => p.status === 'submitted').reduce((s,p) => s + (p.total||0), 0);
-            
-            document.getElementById('stat-total').textContent = projects.length;
-            document.getElementById('stat-active').textContent = active;
-            document.getElementById('stat-won').textContent = '$' + wonThisMonth.toLocaleString();
-            document.getElementById('stat-pending').textContent = '$' + pending.toLocaleString();
+            document.getElementById('totalProjects').textContent = projects.length;
+            document.getElementById('activeBids').textContent = projects.filter(p => p.status === 'draft' || p.status === 'submitted').length;
+            document.getElementById('pendingAmount').textContent = '$' + projects.filter(p => p.status === 'submitted').reduce((sum, p) => sum + p.total, 0).toLocaleString();
         }
         
-        function renderRates() {
-            const list = document.getElementById('rateList');
-            rates = rates.length ? rates : defaultRates;
-            list.innerHTML = rates.map(r => `
-                <tr>
-                    <td>${r.category}</td>
-                    <td>${r.description || ''}</td>
-                    <td class="text-right">$${r.unit_cost}</td>
-                    <td>${r.unit}</td>
-                    <td><button class="btn btn-secondary btn-sm" onclick="deleteRate(${r.id})">×</button></td>
-                </tr>`).join('');
+        function showNewProject() {
+            document.getElementById('projectModal').style.display = 'flex';
         }
         
-        function renderHistory() {
-            const won = projects.filter(p => p.status === 'won');
-            const lost = projects.filter(p => p.status === 'lost');
-            const total = projects.reduce((s,p) => s + (p.total||0), 0);
-            const avg = projects.length ? Math.round(total/projects.length) : 0;
-            const winRate = (won.length + lost.length) ? Math.round(won.length/(won.length+lost.length)*100) : 0;
-            
-            document.getElementById('hist-winrate').textContent = winRate + '%';
-            document.getElementById('hist-avg').textContent = '$' + avg.toLocaleString();
-            document.getElementById('hist-total').textContent = '$' + won.reduce((s,p) => s + (p.total||0), 0).toLocaleString();
-            
-            const list = document.getElementById('historyList');
-            list.innerHTML = projects.map(p => `
-                <tr>
-                    <td>${p.name}</td>
-                    <td>${p.client}</td>
-                    <td>$${(p.total||0).toLocaleString()}</td>
-                    <td><span class="badge badge-${p.status}">${p.status}</span></td>
-                    <td>${p.updated_at ? new Date(p.updated_at).toLocaleDateString() : '-'}</td>
-                </tr>`).join('') || '<tr><td colspan="5" class="empty-state">No history yet</td></tr>';
+        function closeModal() {
+            document.getElementById('projectModal').style.display = 'none';
         }
         
-        // Views
-        function showView(view) {
-            document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
-            document.querySelectorAll('.header-links button').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (view === 'dashboard') {
-                document.getElementById('dashboard-view').style.display = 'block';
-                loadProjects();
-            } else if (view === 'history') {
-                document.getElementById('history-view').style.display = 'block';
-                renderHistory();
-            } else if (view === 'rates') {
-                document.getElementById('rates-view').style.display = 'block';
-                loadRates();
-            } else if (view === 'detail') {
-                document.getElementById('detail-view').style.display = 'block';
-            }
+        function viewProject(id) {
+            alert('Project details coming soon! ID: ' + id);
         }
         
-        // Project
-        function showNewProject() { document.getElementById('project-modal').style.display = 'flex'; }
-        
-        function showTemplates() {
-            const templateList = document.getElementById("templateList");
-            if (templateList) {
-                document.getElementById("project-modal").style.display = "flex";
-            }
+        function addRate() {
+            alert('Add rate coming soon!');
         }
         
-        document.getElementById('projectForm').addEventListener('submit', async e => {
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const form = new FormData(e.target);
-            const data = { name: form.get('name'), client: form.get('client'), address: form.get('address'), deadline: form.get('deadline'), overhead: parseFloat(form.get('overhead')), profit: parseFloat(form.get('profit')) };
-            
-            try {
-                const res = await fetch(API + '/api/projects', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-                const result = await res.json();
-                if (result.success) {
-                    closeModal();
-                    loadProjects();
-                    e.target.reset();
-                }
-            } catch(err) { alert('Error creating project'); }
+            const formData = new FormData(e.target);
+            const project = {
+                id: projects.length + 1,
+                name: formData.get('name'),
+                client: formData.get('client'),
+                deadline: formData.get('deadline'),
+                total: 0,
+                status: 'draft'
+            };
+            projects.push(project);
+            renderProjects();
+            renderStats();
+            closeModal();
+            e.target.reset();
         });
         
-        async function viewProject(id) {
-            currentProject = projects.find(p => p.id === id);
-            if (!currentProject) return;
-            
-            document.getElementById('detail-name').textContent = currentProject.name;
-            document.getElementById('detail-client').textContent = currentProject.client;
-            showView('detail');
-            renderLineItems();
-        }
-        
-        async function renderLineItems() {
-            if (!currentProject) return;
-            const container = document.getElementById('lineItems');
-            
-            // Get line items from API
-            let items = [];
-            try {
-                const res = await fetch(API + '/api/projects/' + currentProject.id);
-                const data = await res.json();
-                items = data.data?.line_items || currentProject.line_items || [];
-            } catch(e) { items = []; }
-            
-            if (!items.length) {
-                container.innerHTML = '<div class="empty-state">No line items yet <button class="btn btn-primary btn-sm" onclick="showAddLineItem()">Add Item</button></div>';
-                return;
-            }
-            
-            let subtotal = 0;
-            container.innerHTML = items.map(item => {
-                const total = (item.quantity || 0) * (item.unit_cost || 0) * (1 + (item.markup||0)/100);
-                subtotal += total;
-                return `<div style="display:flex;justify-content:space-between;padding:0.5rem;border-bottom:1px solid var(--border)">
-                    <span>${item.category} - ${item.description || ''}</span>
-                    <span>$${total.toLocaleString()}</span>
-                </div>`;
-            }).join('');
-            
-            const overhead = currentProject.overhead || 0;
-            const profit = currentProject.profit || 0;
-            const overheadAmt = subtotal * overhead / 100;
-            const profitAmt = subtotal * profit / 100;
-            const final = subtotal + overheadAmt + profitAmt;
-            
-            document.getElementById('total-sub').textContent = '$' + subtotal.toLocaleString();
-            document.getElementById('total-overhead').textContent = '$' + overheadAmt.toLocaleString();
-            document.getElementById('total-profit').textContent = '$' + profitAmt.toLocaleString();
-            document.getElementById('total-final').textContent = '$' + final.toLocaleString();
-        }
-        
-        async function updateStatus(status) {
-            if (!currentProject) return;
-            try {
-                await fetch(API + '/api/projects/' + currentProject.id, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({status}) });
-                loadProjects();
-                showView('dashboard');
-            } catch(e) { alert('Error updating status'); }
-        }
-        
-        function copyToClipboard() {
-        
-        function printBid() {
-            if (!currentProject) return;
-            const items = currentProject.line_items || [];
-            let subtotal = 0;
-            let rows = items.map(item => {
-                const total = (item.quantity || 0) * (item.unit_cost || 0);
-                subtotal += total;
-                return `<tr><td>${item.category}</td><td>${item.description || ""}</td><td>${item.quantity}</td><td>$${item.unit_cost}</td><td style="text-align:right">$${total.toLocaleString()}</td></tr>`;
-            }).join("");
-            const overhead = currentProject.overhead || 0;
-            const profit = currentProject.profit || 0;
-            const overheadAmt = subtotal * overhead / 100;
-            const profitAmt = subtotal * profit / 100;
-            const total = subtotal + overheadAmt + profitAmt;
-            const html = `<html><head><title>Bid</title></head><body style="font-family:Arial;padding:40px;"><h1 style="color:#1a5632">5B CONTRACTING LLC</h1><h2>Bid: ${currentProject.name}</h2><p><strong>Client:</strong> ${currentProject.client}<br><strong>Address:</strong> ${currentProject.address || "N/A"}<br><strong>Date:</strong> ${new Date().toLocaleDateString()}</p><table border="1" style="border-collapse:collapse;width:100%"><tr style="background:#1a5632;color:white"><th>Category</th><th>Description</th><th>Qty</th><th>Unit Cost</th><th>Total</th></tr>${rows}</table><div style="margin-top:20px;text-align:right"><div>Subtotal: $${subtotal.toLocaleString()}</div><div>Overhead (${overhead}%): $${overheadAmt.toLocaleString()}</div><div>Profit (${profit}%): $${profitAmt.toLocaleString()}</div><div style="font-size:24px;font-weight:bold;color:#1a5632">TOTAL: $${total.toLocaleString()}</div></div></body></html>`;
-            const win = window.open("", "_blank"); win.document.write(html); win.document.close(); win.print();
-        }
-            if (!currentProject) return;
-            const text = `${currentProject.name}\nClient: ${currentProject.client}\n\nLine Items:\n${document.getElementById('lineItems').innerText}\n\nTotal: ${document.getElementById('total-final').textContent}`;
-            navigator.clipboard.writeText(text);
-            alert('Copied to clipboard!');
-        }
-        
-        // Line Items
-        function showAddLineItem() { document.getElementById('item-modal').style.display = 'flex'; }
-        
-        function updateCategorySelect() {
-            const sel = document.getElementById('item-category');
-            const r = rates.length ? rates : defaultRates;
-            sel.innerHTML = r.map(rate => `<option value="${rate.category}" data-cost="${rate.unit_cost}">${rate.category}</option>`).join('');
-        }
-        
-        document.getElementById('item-category').addEventListener('change', e => {
-            const opt = e.target.options[e.target.selectedIndex];
-            if (opt) document.querySelector('[name="unit_cost"]').value = opt.dataset.cost || '';
-        });
-        
-        document.getElementById('itemForm').addEventListener('submit', async e => {
-            e.preventDefault();
-            if (!currentProject) return;
-            const form = new FormData(e.target);
-            const data = { category: form.get('category'), description: form.get('description'), quantity: parseFloat(form.get('quantity')), unit_cost: parseFloat(form.get('unit_cost')), markup: parseFloat(form.get('markup')) };
-            
-            try {
-                await fetch(API + '/api/projects/' + currentProject.id + '/line-items', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-                closeModal();
-                renderLineItems();
-                e.target.reset();
-            } catch(err) { alert('Error adding item'); }
-        });
-        
-        // Rates
-        function showAddRate() { document.getElementById('rate-modal').style.display = 'flex'; }
-        
-        document.getElementById('rateForm').addEventListener('submit', async e => {
-            e.preventDefault();
-            const form = new FormData(e.target);
-            const data = { category: form.get('category'), description: form.get('description'), unit_cost: parseFloat(form.get('unit_cost')), unit: form.get('unit') };
-            
-            try {
-                await fetch(API + '/api/rates', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-                closeModal();
-                loadRates();
-                e.target.reset();
-            } catch(err) { alert('Error adding rate'); }
-        });
-        
-        async function deleteRate(id) {
-            try {
-                await fetch(API + '/api/rates/' + id, { method: 'DELETE' });
-                loadRates();
-            } catch(e) {}
-        }
-        
-        // Modal
-        function closeModal() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
-        
-        // Init
-        loadProjects();
-        loadRates();
-
-        function printBid() {
-            if (!currentProject) return;
-            let items = currentProject.line_items || [];
-            let subtotal = 0;
-            let rows = items.map(item => {
-                const total = (item.quantity || 0) * (item.unit_cost || 0);
-                subtotal += total;
-                return '<tr><td>' + item.category + '</td><td>' + (item.description || '') + '</td><td>' + item.quantity + '</td><td>$' + item.unit_cost + '</td><td style="text-align:right">$' + total.toLocaleString() + '</td></tr>';
-            }).join('');
-            
-            const overhead = currentProject.overhead || 0;
-            const profit = currentProject.profit || 0;
-            const overheadAmt = subtotal * overhead / 100;
-            const profitAmt = subtotal * profit / 100;
-            const total = subtotal + overheadAmt + profitAmt;
-            
-            const html = '<html><head><title>Bid - ' + currentProject.name + '</title></head><body style="font-family:Arial;padding:40px;"><h1 style="color:#1a5632">5B CONTRACTING LLC</h1><h2>Bid: ' + currentProject.name + '</h2><p><strong>Client:</strong> ' + currentProject.client + '<br><strong>Address:</strong> ' + (currentProject.address || 'N/A') + '<br><strong>Date:</strong> ' + new Date().toLocaleDateString() + '</p><table border="1" style="border-collapse:collapse;width:100%"><tr style="background:#1a5632;color:white"><th>Category</th><th>Description</th><th>Qty</th><th>Unit Cost</th><th>Total</th></tr>' + rows + '</table><div style="margin-top:20px;text-align:right"><div>Subtotal: $' + subtotal.toLocaleString() + '</div><div>Overhead (' + overhead + '%): $' + overheadAmt.toLocaleString() + '</div><div>Profit (' + profit + '%): $' + profitAmt.toLocaleString() + '</div><div style="font-size:24px;font-weight:bold;color:#1a5632">TOTAL: $' + total.toLocaleString() + '</div></div></body></html>';
-            
-            const win = window.open("", "_blank");
-            win.document.write(html);
-            win.document.close();
-            win.print();
-        }
-
+        renderProjects();
+        renderStats();
     </script>
 </body>
 </html>
