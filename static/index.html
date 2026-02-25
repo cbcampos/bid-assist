@@ -629,6 +629,31 @@
         // Init
         loadProjects();
         loadRates();
+
+        function printBid() {
+            if (!currentProject) return;
+            let items = currentProject.line_items || [];
+            let subtotal = 0;
+            let rows = items.map(item => {
+                const total = (item.quantity || 0) * (item.unit_cost || 0);
+                subtotal += total;
+                return '<tr><td>' + item.category + '</td><td>' + (item.description || '') + '</td><td>' + item.quantity + '</td><td>$' + item.unit_cost + '</td><td style="text-align:right">$' + total.toLocaleString() + '</td></tr>';
+            }).join('');
+            
+            const overhead = currentProject.overhead || 0;
+            const profit = currentProject.profit || 0;
+            const overheadAmt = subtotal * overhead / 100;
+            const profitAmt = subtotal * profit / 100;
+            const total = subtotal + overheadAmt + profitAmt;
+            
+            const html = '<html><head><title>Bid - ' + currentProject.name + '</title></head><body style="font-family:Arial;padding:40px;"><h1 style="color:#1a5632">5B CONTRACTING LLC</h1><h2>Bid: ' + currentProject.name + '</h2><p><strong>Client:</strong> ' + currentProject.client + '<br><strong>Address:</strong> ' + (currentProject.address || 'N/A') + '<br><strong>Date:</strong> ' + new Date().toLocaleDateString() + '</p><table border="1" style="border-collapse:collapse;width:100%"><tr style="background:#1a5632;color:white"><th>Category</th><th>Description</th><th>Qty</th><th>Unit Cost</th><th>Total</th></tr>' + rows + '</table><div style="margin-top:20px;text-align:right"><div>Subtotal: $' + subtotal.toLocaleString() + '</div><div>Overhead (' + overhead + '%): $' + overheadAmt.toLocaleString() + '</div><div>Profit (' + profit + '%): $' + profitAmt.toLocaleString() + '</div><div style="font-size:24px;font-weight:bold;color:#1a5632">TOTAL: $' + total.toLocaleString() + '</div></div></body></html>';
+            
+            const win = window.open("", "_blank");
+            win.document.write(html);
+            win.document.close();
+            win.print();
+        }
+
     </script>
 </body>
 </html>
