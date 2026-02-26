@@ -6,7 +6,7 @@
     /* Mobile Optimizations */
     @media (max-width: 768px) {
         /* Sidebar - hide by default, show toggle */
-        .sidebar { display: none; position: fixed; left: 0; top: 0; bottom: 0; width: 280px; z-index:50; overflow-y:auto; }
+        .sidebar { display: none; position: fixed; left: 0; top: 0; bottom: 0; width: 280px; z-index:9999; overflow-y:auto; }
         .sidebar.active { display: block; }
         .sidebar-overlay { display: none; position: fixed; inset: 0; bg-black bg-opacity-50 z-40; }
         .sidebar-overlay.active { display: block; }
@@ -49,7 +49,18 @@
     @media (max-width: 768px) {
         #mobile-menu-btn { display: flex !important; }
     }
-    </style>
+    
+    @media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.active {
+            transform: translateX(0);
+        }
+    }
+
+</style>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,12 +110,23 @@
         
         /* Progress Bar Animation */
         .progress-bar { transition: width 1s ease-in-out; }
-    </style>
+    
+    @media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.active {
+            transform: translateX(0);
+        }
+    }
+
+</style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
     <!-- Sidebar (Hidden on Print) -->
-    <aside class="no-print fixed inset-y-0 left-0 bg-dark text-white w-64 flex flex-col transition-transform z-20">
+    <aside class="no-print fixed inset-y-0 left-0 bg-dark text-white w-64 flex flex-col transition-transform z-20 sidebar">
         <div class="flex items-center justify-center h-16 bg-black border-b border-gray-800">
             <i class="fa-solid fa-truck-excavator text-brand text-2xl mr-2"></i>
             <span class="text-xl font-bold tracking-wider">BidAssist</span>
@@ -153,7 +175,19 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="main-content ml-64 p-8 min-h-screen">
+    
+    <!-- Mobile Header -->
+    <div class="md:hidden fixed top-0 left-0 right-0 bg-dark text-white z-50 flex items-center justify-between px-4 py-3 shadow-lg">
+        <button onclick="toggleSidebar()" class="p-2 -ml-2">
+            <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+        <span class="font-bold text-lg">BidAssist</span>
+        <div class="w-8"></div>
+    </div>
+    <!-- Spacer for fixed header -->
+    <div class="md:hidden h-14"></div>
+
+<main class="main-content ml-64 p-4 md:p-8 min-h-screen pt-16 md:pt-8">
         
         <!-- DYNAMIC HEADER -->
         <header class="no-print flex justify-between items-center mb-8">
