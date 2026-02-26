@@ -1050,6 +1050,10 @@ const fieldReportsData = [
 function renderLeads() {
     const tbody = document.getElementById('leads-body');
     if (!tbody) return;
+    let html = '';
+    leadsData.forEach((l, idx) => {
+    const tbody = document.getElementById('leads-body');
+    if (!tbody) return;
     tbody.innerHTML = '';
     leadsData.forEach((l, idx) => {
         const statusClass = l.status === 'Hot' ? 'bg-red-100 text-red-800' : l.status === 'Warm' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800';
@@ -1059,6 +1063,10 @@ function renderLeads() {
 }
 
 function renderInvoices() {
+    const tbody = document.getElementById('invoices-body');
+    if (!tbody) return;
+    let html = '';
+    invoicesData.forEach((i, idx) => {
     const tbody = document.getElementById('invoices-body');
     if (!tbody) return;
     tbody.innerHTML = '';
@@ -1072,6 +1080,10 @@ function renderInvoices() {
 function renderTickets() {
     const tbody = document.getElementById('tickets-body');
     if (!tbody) return;
+    let html = '';
+    ticketsData.forEach((t, idx) => {
+    const tbody = document.getElementById('tickets-body');
+    if (!tbody) return;
     tbody.innerHTML = '';
     ticketsData.forEach((t, idx) => {
         const statusClass = t.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
@@ -1081,6 +1093,10 @@ function renderTickets() {
 }
 
 function renderChangeOrders() {
+    const tbody = document.getElementById('co-body');
+    if (!tbody) return;
+    let html = '';
+    changeOrdersData.forEach((c, idx) => {
     const tbody = document.getElementById('co-body');
     if (!tbody) return;
     tbody.innerHTML = '';
@@ -1094,6 +1110,10 @@ function renderChangeOrders() {
 function renderSubs() {
     const tbody = document.getElementById('subs-body');
     if (!tbody) return;
+    let html = '';
+    subsData.forEach((s, idx) => {
+    const tbody = document.getElementById('subs-body');
+    if (!tbody) return;
     tbody.innerHTML = '';
     subsData.forEach((s, idx) => {
         const statusClass = s.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
@@ -1103,6 +1123,10 @@ function renderSubs() {
 }
 
 function renderFieldReports() {
+    const tbody = document.getElementById('fr-body');
+    if (!tbody) return;
+    let html = '';
+    fieldReportsData.forEach((f, idx) => {
     const tbody = document.getElementById('fr-body');
     if (!tbody) return;
     tbody.innerHTML = '';
