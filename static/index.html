@@ -848,10 +848,10 @@
 let bidStatuses = {1: 'Draft', 2: 'Submitted', 3: 'Won', 4: 'Draft'};
 
 const bidsData = {
-    1: { name: 'Highland Subdivision Phase 2', client: 'Apex Development', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 1500 },{ category: 'Excavation', desc: 'Cut to subgrade', qty: 1200, cost: 12.50 }]},
-    2: { name: 'Eastdale Commons', client: 'Coleman Dev', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 2500 }]},
-    3: { name: 'VA Hospital', client: 'US Govt', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 1200 }]},
-    4: { name: 'Downtown Mixed-Use', client: 'Capital City', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 3000 }]}
+    1: { name: 'Prattville Shopping Center', client: 'Apex Development', status: 'Submitted', items: [{ category: 'Mobilization', desc: 'Move in equipment', qty: 1, cost: 2500 },{ category: 'Excavation', desc: 'Building pad - 45000 sq ft', qty: 8500, cost: 4.50 },{ category: 'Backfill', desc: 'Utility trench backfill', qty: 1200, cost: 18.00 },{ category: 'Grading', desc: 'Final grade', qty: 45000, cost: 0.35 }]},
+    2: { name: 'Wetumpka Sewer Main Extension', client: 'City of Wetumpka', status: 'Draft', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 3200 },{ category: 'Trenching', desc: '12" sewer main - 2400 LF', qty: 2400, cost: 28.00 },{ category: 'Pipe Install', desc: '12" PVC pipe', qty: 2400, cost: 45.00 },{ category: 'Restoration', desc: 'Asphalt patch', qty: 600, cost: 65.00 }]},
+    3: { name: 'Montgomery Storage Facility', client: 'Southeast Storage LLC', status: 'Won', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 1800 },{ category: 'Excavation', desc: 'Building pads - 20 units', qty: 4200, cost: 5.25 },{ category: 'Utilities', desc: 'Water/sewer lines', qty: 20, cost: 450 }]},
+    4: { name: 'Hillcrest Drive Residential', client: 'Lee Properties', status: 'Draft', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 1200 },{ category: 'Excavation', desc: 'Foundation dig', qty: 1800, cost: 6.50 },{ category: 'Backfill', desc: 'Foundation backfill', qty: 950, cost: 22.00 }]}
 };
 
 function loadBid(id) {
