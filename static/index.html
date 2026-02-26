@@ -633,7 +633,7 @@
             
             const headers = {
                 'dashboard': { t: 'Dashboard Overview', s: "Welcome back. Here's your pipeline status.", a: '<button onclick="switchView(\'bid-editor\')" class="px-4 py-2 bg-brand text-dark font-bold rounded-lg hover:bg-brand-dark shadow-sm transition"><i class="fa-solid fa-plus mr-2"></i>New Bid</button>' },
-                'bid-editor': { t: 'Bid Editor', s: 'Editing: Highland Subdivision Phase 2', a: '' },
+                'bid-editor': { t: 'Bid Editor', s: 'Editing: Select a bid', a: '' },
                 'clients': { t: 'Client Database', s: 'Manage your customers and contacts.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg hover:bg-brand-dark shadow-sm"><i class="fa-solid fa-user-plus mr-2"></i>Add Client</button>' },
                 'rate-card': { t: 'Rate Card', s: 'Standard pricing for estimating.', a: '<button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg hover:bg-brand-dark shadow-sm"><i class="fa-solid fa-tag mr-2"></i>Add Rate</button>' },
                 'job-costing': { t: 'Job Costing (WIP)', s: 'Track estimated vs actual costs in real-time.', a: '<button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50"><i class="fa-solid fa-file-csv mr-2"></i>Export CSV</button>' },
@@ -1146,6 +1146,7 @@ function renderFieldReports() {
 
 // Initialize Everything on Load
         window.onload = () => {
+            loadBid(1);
             renderLineItems();
             renderClients();
             renderRateCard();
@@ -1159,6 +1160,8 @@ function renderFieldReports() {
             renderSubs();
             renderFieldReports();
             initCharts();
+            // Load initial bid
+            setTimeout(() => loadBid(1), 100);
         };
     </script>
 
