@@ -581,15 +581,35 @@
         ];
 
         const rateCardData =[
-            { id: 1, cat: 'Equipment', desc: 'Cat 320 Excavator', cost: 125.00 },
-            { id: 2, cat: 'Labor', desc: 'Operator - Heavy', cost: 45.00 }
-        ];
+        { id: 1, cat: 'Equipment', desc: 'CAT 320 Excavator (36,000 lbs)', cost: 175.00, unit: 'hour' },
+        { id: 2, cat: 'Equipment', desc: 'CAT 336 Excavator (84,000 lbs)', cost: 225.00, unit: 'hour' },
+        { id: 3, cat: 'Equipment', desc: 'CAT D6 Dozer', cost: 185.00, unit: 'hour' },
+        { id: 4, cat: 'Equipment', desc: 'CAT 950M Wheel Loader', cost: 125.00, unit: 'hour' },
+        { id: 5, cat: 'Equipment', desc: 'CAT 140M Motor Grader', cost: 145.00, unit: 'hour' },
+        { id: 6, cat: 'Equipment', desc: 'Dump Truck (10-yard)', cost: 85.00, unit: 'hour' },
+        { id: 7, cat: 'Equipment', desc: 'Water Truck', cost: 95.00, unit: 'hour' },
+        { id: 8, cat: 'Equipment', desc: 'Skid Steer Loader', cost: 65.00, unit: 'hour' },
+        { id: 9, cat: 'Labor', desc: 'Heavy Equipment Operator', cost: 45.00, unit: 'hour' },
+        { id: 10, cat: 'Labor', desc: 'Laborer', cost: 28.00, unit: 'hour' },
+        { id: 11, cat: 'Labor', desc: 'Foreman', cost: 55.00, unit: 'hour' },
+        { id: 12, cat: 'Labor', desc: ' CDL Driver', cost: 32.00, unit: 'hour' },
+        { id: 13, cat: 'Materials', desc: 'Crush Run (CR-6)', cost: 28.00, unit: 'ton' },
+        { id: 14, cat: 'Materials', desc: '#57 Stone', cost: 32.00, unit: 'ton' },
+        { id: 15, cat: 'Materials', desc: '#789 Granite', cost: 38.00, unit: 'ton' },
+        { id: 16, cat: 'Materials', desc: 'Topsoil', cost: 22.00, unit: 'yard' },
+        { id: 17, cat: 'Services', desc: 'Excavation (common earth)', cost: 4.50, unit: 'yard' },
+        { id: 18, cat: 'Services', desc: 'Backfill (compacted)', cost: 8.00, unit: 'yard' },
+        { id: 19, cat: 'Services', desc: 'Final Grade', cost: 0.45, unit: 'sq ft' },
+        { id: 20, cat: 'Services', desc: 'Hauling (per mile)', cost: 3.50, unit: 'mile' }
+    ];
 
         // Q2 Features Data
         const jobCostingData =[
-            { id: 1, project: 'Highland Subdiv Phase 1', client: 'Apex Dev', est: 45000, actual: 38500, status: 'In Progress' },
-            { id: 2, project: 'Smith Foundation Dig', client: 'Smith Family', est: 12400, actual: 13100, status: 'Over Budget' },
-            { id: 3, project: 'City Water Main', client: 'Montgomery Muni', est: 128500, actual: 42000, status: 'Started' }
+            { id: 1, project: 'Prattville Shopping Center', client: 'Apex Development', est: 125000, actual: 98500, status: 'In Progress' },
+            { id: 2, project: 'Wetumpka Sewer Main', client: 'City of Wetumpka', est: 185000, actual: 142000, status: 'In Progress' },
+            { id: 3, project: 'Hillcrest Drive Residential', client: 'Lee Properties', est: 45000, actual: 38500, status: 'Completed' },
+            { id: 4, project: 'Montgomery Storage Facility', client: 'Southeast Storage', est: 95000, actual: 98000, status: 'Over Budget' },
+            { id: 5, project: 'Eastgate Plaza', client: 'Coleman Dev', est: 78000, actual: 72000, status: 'Completed' }
         ];
 
         const equipmentData =[
@@ -601,10 +621,11 @@
         ];
 
         const portalData =[
-            { client: 'Apex Development', active: 2, pending: 1, lastLogin: 'Today, 9:45 AM', code: 'apx-8f2a' },
-            { client: 'Montgomery Muni', active: 1, pending: 2, lastLogin: 'Yesterday', code: 'mty-9c1x' },
-            { client: 'Smith Family Farms', active: 0, pending: 1, lastLogin: 'Feb 20, 2026', code: 'smf-3b4z' }
-        ];
+        { client: 'Apex Development Group', active: 3, pending: 2, lastLogin: 'Today, 9:45 AM', code: 'apex-8f2a' },
+        { client: 'City of Wetumpka', active: 1, pending: 0, lastLogin: 'Yesterday, 2:30 PM', code: 'wetumpka-3k1b' },
+        { client: 'Lee Properties', active: 2, pending: 1, lastLogin: 'Today, 11:00 AM', code: 'lee-9x4p' },
+        { client: 'Southeast Storage LLC', active: 1, pending: 0, lastLogin: 'Feb 20, 2026', code: 'se storage-2m7n' }
+    ];
 
         // ==========================================
         // 2. VIEW SWITCHING LOGIC
@@ -690,16 +711,69 @@
 
         function renderClients() {
             const tbody = document.getElementById('clients-body');
-            clientsData.forEach(c => {
-                tbody.innerHTML += `<tr class="border-b border-gray-100"><td class="px-6 py-4 font-bold text-gray-900">${c.company}</td><td class="px-6 py-4">${c.contact}</td><td class="px-6 py-4 text-blue-600">${c.email}</td></tr>`;
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            clientsData.forEach((c, idx) => {
+                const totalJobs = c.totalBids || 0;
+                const totalRevenue = c.revenue || 0;
+                tbody.innerHTML += `<tr onclick="showClientDetails(${idx})" class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                    <td class="px-6 py-4 font-bold text-gray-900">${c.company}</td>
+                    <td class="px-6 py-4 text-gray-600">${c.contact}</td>
+                    <td class="px-6 py-4 text-blue-600">${c.email}</td>
+                    <td class="px-6 py-4 text-right text-gray-600">${totalJobs} jobs</td>
+                    <td class="px-6 py-4 text-right font-bold text-green-600">$${totalRevenue.toLocaleString()}</td>
+                </tr>`;
             });
+        }
+        
+        function showClientDetails(idx) {
+            const c = clientsData[idx];
+            document.getElementById('details-title').innerText = c.company;
+            document.getElementById('details-content').innerHTML = `
+                <div class="grid grid-cols-2 gap-4">
+                    <div><p class="text-sm text-gray-500">Contact</p><p class="font-medium">${c.contact}</p></div>
+                    <div><p class="text-sm text-gray-500">Phone</p><p class="font-medium">${c.phone || 'N/A'}</p></div>
+                    <div class="col-span-2"><p class="text-sm text-gray-500">Email</p><p class="font-medium text-blue-600">${c.email}</p></div>
+                    <div class="col-span-2"><p class="text-sm text-gray-500">Address</p><p class="font-medium">${c.address || 'N/A'}</p></div>
+                    <div><p class="text-sm text-gray-500">Total Jobs</p><p class="font-bold text-lg">${c.totalBids || 0}</p></div>
+                    <div><p class="text-sm text-gray-500">Won</p><p class="font-bold text-lg text-green-600">${c.wins || 0}</p></div>
+                    <div class="col-span-2"><p class="text-sm text-gray-500">Total Revenue</p><p class="font-bold text-xl text-green-600">$${(c.revenue || 0).toLocaleString()}</p></div>
+                </div>`;
+            document.getElementById('details-actions').innerHTML = `
+                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"><i class="fa-solid fa-phone mr-2"></i>Call</button>
+                <button class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm"><i class="fa-solid fa-envelope mr-2"></i>Email</button>
+                <button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg text-sm"><i class="fa-solid fa-plus mr-2"></i>New Bid</button>`;
+            document.getElementById('details-modal').classList.remove('hidden');
         }
 
         function renderRateCard() {
             const tbody = document.getElementById('rate-card-body');
-            rateCardData.forEach(r => {
-                tbody.innerHTML += `<tr class="border-b border-gray-100"><td class="px-6 py-4 font-bold text-gray-500">${r.cat}</td><td class="px-6 py-4">${r.desc}</td><td class="px-6 py-4 text-right">$${r.cost.toFixed(2)}</td></tr>`;
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            rateCardData.forEach((r, idx) => {
+                const unit = r.unit || 'each';
+                tbody.innerHTML += `<tr onclick="showRateDetails(${idx})" class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                    <td class="px-6 py-4 font-bold text-gray-500">${r.cat}</td>
+                    <td class="px-6 py-4 font-medium">${r.desc}</td>
+                    <td class="px-6 py-4 text-right font-bold">$${r.cost.toFixed(2)}</td>
+                    <td class="px-6 py-4 text-gray-500">/${unit}</td>
+                </tr>`;
             });
+        }
+        
+        function showRateDetails(idx) {
+            const r = rateCardData[idx];
+            document.getElementById('details-title').innerText = r.desc;
+            document.getElementById('details-content').innerHTML = `
+                <div class="grid grid-cols-2 gap-4">
+                    <div><p class="text-sm text-gray-500">Category</p><p class="font-medium">${r.cat}</p></div>
+                    <div><p class="text-sm text-gray-500">Unit</p><p class="font-medium">${r.unit || 'each'}</p></div>
+                    <div class="col-span-2"><p class="text-sm text-gray-500">Rate</p><p class="font-bold text-2xl text-green-600">$${r.cost.toFixed(2)} <span class="text-base text-gray-500">per ${r.unit || 'unit'}</span></p></div>
+                </div>`;
+            document.getElementById('details-actions').innerHTML = `
+                <button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg text-sm"><i class="fa-solid fa-edit mr-2"></i>Edit Rate</button>
+                <button class="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm"><i class="fa-solid fa-copy mr-2"></i>Duplicate</button>`;
+            document.getElementById('details-modal').classList.remove('hidden');
         }
 
         // ==========================================
@@ -708,6 +782,7 @@
         
         function renderJobCosting() {
             const tbody = document.getElementById('job-costing-body');
+            if (!tbody) return;
             let html = '';
             
             jobCostingData.forEach(j => {
@@ -744,9 +819,10 @@
 
         function renderEquipment() {
             const grid = document.getElementById('equipment-grid');
+            if (!grid) return;
             let html = '';
 
-            equipmentData.forEach(eq => {
+            equipmentData.forEach((eq, idx) => {
                 // Status styles
                 let iconClass = 'fa-tractor';
                 if(eq.type === 'Truck') iconClass = 'fa-truck';
@@ -798,6 +874,7 @@
 
         function renderPortals() {
             const tbody = document.getElementById('portal-body');
+            if (!tbody) return;
             let html = '';
 
             portalData.forEach(p => {
@@ -918,49 +995,63 @@ function addLineItem() {
 
 // Leads Data
 const leadsData = [
-    {company:"East Alabama Developmental",contact:"Mark Edwards",source:"Referral",value:175000,status:"Hot"},
-    {company:"City of Prattville",contact:"Public Works",source:"Bid List",value:85000,status:"Warm"},
-    {company:"Troy University",contact:"Facilities Mgr",source:"Website",value:120000,status:"New"},
-    {company:"Elmore County Schools",contact:"Superintendent",source:"Cold Call",value:95000,status:"Warm"}
+    {id:1, company:'East Alabama Developmental', contact:'Mark Edwards', phone:'(334) 555-0201', email:'mark@eastaldev.com', source:'Referral', value:175000, status:'Hot', notes:'Interested in shopping center development'},
+    {id:2, company:'City of Prattville', contact:'Public Works', phone:'(334) 555-0202', email:'publicworks@prattville.gov', source:'Bid List', value:85000, status:'Warm', notes:'Road improvement project'},
+    {id:3, company:'Troy University', contact:'Facilities Manager', phone:'(334) 555-0203', email:'facilities@troy.edu', source:'Website', value:120000, status:'New', notes:'Campus expansion Phase 2'},
+    {id:4, company:'Elmore County Schools', contact:'Superintendent', phone:'(334) 555-0204', email:'super@elmore.k12.al.us', source:'Cold Call', value:95000, status:'Warm', notes:'New elementary school site'},
+    {id:5, company:'Millbrook Development Corp', contact:'Mike Johnson', phone:'(334) 555-0205', email:'mike@millbrookdev.com', source:'Referral', value:210000, status:'Hot', notes:'50-lot subdivision'}
 ];
 
 // Invoices Data
 const invoicesData = [
-    {id:"INV-001",client:"Apex Development",amount:87500,status:"Sent",due:"2026-03-15"},
-    {id:"INV-002",client:"Lee Properties",amount:142000,status:"Paid",due:"2026-02-28"},
-    {id:"INV-003",client:"City of Wetumpka",amount:45000,status:"Draft",due:"2026-04-01"}
+    {id:'INV-001', client:'Apex Development', amount:87500, status:'Sent', due:'2026-03-15', items:[{desc:'Prattville Shopping - Phase 1', amount:87500}]},
+    {id:'INV-002', client:'Lee Properties', amount:142000, status:'Paid', due:'2026-02-28', paid:'2026-02-20', items:[{desc:'Hillcrest Drive - Excavation', amount:142000}]},
+    {id:'INV-003', client:'City of Wetumpka', amount:45000, status:'Draft', due:'2026-04-01', items:[{desc:'Sewer Main - Design', amount:15000}, {desc:'Sewer Main - Installation', amount:30000}]},
+    {id:'INV-004', client:'Southeast Storage', amount:67500, status:'Sent', due:'2026-03-10', items:[{desc:'Montgomery Storage - Site Prep', amount:67500}]},
+    {id:'INV-005', client:'Prattville Medical', amount:28000, status:'Overdue', due:'2026-02-01', items:[{desc:'Parking Lot Expansion', amount:28000}]}
 ];
 
 // 811 Tickets Data
 const ticketsData = [
-    {id:"811-2026-0156",location:"4500 Atlanta Hwy, Prattville",status:"Active",expires:"2026-03-01"},
-    {id:"811-2026-0157",location:"2200 River Rd, Wetumpka",status:"Active",expires:"2026-03-05"},
-    {id:"811-2026-0148",location:"8900 Commerce Way, Wetumpka",status:"Complete",expires:"2026-02-15"}
+    {id:'811-2026-0156', location:'4500 Atlanta Hwy, Prattville, AL', status:'Active', expires:'2026-03-01', project:'Prattville Shopping Center', utility:'Multiple'},
+    {id:'811-2026-0157', location:'2200 River Rd, Wetumpka, AL', status:'Active', expires:'2026-03-05', project:'Wetumpka Sewer Main', utility:'Water, Sewer'},
+    {id:'811-2026-0148', location:'8900 Commerce Way, Wetumpka, AL', status:'Complete', expires:'2026-02-15', project:'Completed Site Work', utility:'Gas'},
+    {id:'811-2026-0145', location:'1500 Hillcrest Dr, Montgomery, AL', status:'Active', expires:'2026-03-10', project:'Hillcrest Residential', utility:'Electric'},
+    {id:'811-2026-0140', location:'3200 Troy Hwy, Montgomery, AL', status:'Pending', expires:'2026-03-15', project:'Troy Highway Development', utility:'Multiple'}
 ];
 
 // Change Orders Data
 const changeOrdersData = [
-    {project:"Highland Subdivision",desc:"Additional grading - east lot",amount:8500,status:"Pending"},
-    {project:"Eastdale Commons",desc:"Added drainage pipe",amount:3200,status:"Approved"}
+    {id:1, project:'Prattville Shopping Center', desc:'Additional grading - east lot', amount:8500, status:'Pending', reason:'Owner requested additional work', date:'2026-02-20'},
+    {id:2, project:'Wetumpka Sewer Main', desc:'Added drainage pipe', amount:3200, status:'Approved', reason:'Unforeseen condition', date:'2026-02-18'},
+    {id:3, project:'Montgomery Storage Facility', desc:'Rock removal - bedrock', amount:12500, status:'Pending', reason:'Hard rock encountered', date:'2026-02-22'},
+    {id:4, project:'Hillcrest Drive Residential', desc:'Added driveway culvert', amount:1800, status:'Approved', reason:'Code requirement', date:'2026-02-15'}
 ];
 
 // Subcontractors Data
 const subsData = [
-    {company:"Alabama Concrete LLC",trade:"Concrete",contact:"Mike Jones",status:"Available"},
-    {company:"Gulf Coast Utilities",trade:"Electrical",contact:"Sam Wilson",status:"Busy"},
-    {company:"Delta Plumbing",trade:"Plumbing",contact:"John Delta",status:"Available"}
+    {id:1, company:'Alabama Concrete LLC', trade:'Concrete', contact:'Mike Jones', phone:'(334) 555-0301', email:'mike@alaconcrete.com', status:'Available', insurance:'Valid - Dec 2026', rating:4.5},
+    {id:2, company:'Gulf Coast Utilities', trade:'Electrical', contact:'Sam Wilson', phone:'(334) 555-0302', email:'sam@gulfcoastutil.com', status:'Busy', insurance:'Valid - Aug 2026', rating:4.2},
+    {id:3, company:'Delta Plumbing Inc', trade:'Plumbing', contact:'John Delta', phone:'(334) 555-0303', email:'john@deltaplumbing.com', status:'Available', insurance:'Valid - Oct 2026', rating:4.7},
+    {id:4, company:'Southeastern Hauling', trade:'Hauling', contact:'Tony Mack', phone:'(334) 555-0304', email:'tony@sehauling.com', status:'Available', insurance:'Valid - Nov 2026', rating:4.0},
+    {id:5, company:'Alabama Grading Services', trade:'Grading', contact:'Rick Brown', phone:'(334) 555-0305', email:'rick@algrading.com', status:'Busy', insurance:'Valid - Sep 2026', rating:4.8}
 ];
 
 // Field Reports Data
 const fieldReportsData = [
-    {date:"2026-02-25",project:"Highland Subdivision",crew:4,hours:8,notes:"Completed grading for lots 5-8"},
-    {date:"2026-02-24",project:"Eastdale Commons",crew:3,hours:7,notes:"Weather delay - rain"}
+    {id:1, date:'2026-02-25', project:'Prattville Shopping Center', crew:6, hours:48, weather:'Sunny 72F', notes:'Completed grading lots 1-5. Started utility trenching.', equipment:['CAT 320','CAT 950','2 Dump Trucks'], materials:['CR-6: 150 tons']},
+    {id:2, date:'2026-02-24', project:'Wetumpka Sewer Main', crew:4, hours:32, weather:'Rain 55F', notes:'Weather delay. Crew on standby.', equipment:['CAT 336','Water Truck'], materials:[]},
+    {id:3, date:'2026-02-23', project:'Hillcrest Drive', crew:3, hours:24, weather:'Cloudy 65F', notes:'Completed foundation excavations for lots 8-12.', equipment:['CAT 320','Skid Steer'], materials:['Backfill: 80 yards']},
+    {id:4, date:'2026-02-22', project:'Montgomery Storage', crew:5, hours:40, weather:'Sunny 68F', notes:'Final grade complete. Utilities in progress.', equipment:['CAT D6','CAT 140M','3 Trucks'], materials:['#57 Stone: 200 tons']},
+    {id:5, date:'2026-02-21', project:'Prattville Shopping Center', crew:4, hours:36, weather:'Windy 60F', notes:'Started storm drain installation.', equipment:['CAT 320','Backhoe'], materials:['Storm pipe: 400 LF']}
 ];
 
 // Render functions
 function renderLeads() {
-    let html = '';
-    leadsData.forEach(l => {
+    const tbody = document.getElementById('leads-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    leadsData.forEach((l, idx) => {
         const statusClass = l.status === 'Hot' ? 'bg-red-100 text-red-800' : l.status === 'Warm' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800';
         html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-bold">'+l.company+'</td><td class="px-6 py-4">'+l.contact+'</td><td class="px-6 py-4">'+l.source+'</td><td class="px-6 py-4 text-right">$'+l.value.toLocaleString()+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+l.status+'</span></td></tr>';
     });
@@ -968,8 +1059,10 @@ function renderLeads() {
 }
 
 function renderInvoices() {
-    let html = '';
-    invoicesData.forEach(i => {
+    const tbody = document.getElementById('invoices-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    invoicesData.forEach((i, idx) => {
         const statusClass = i.status === 'Paid' ? 'bg-green-100 text-green-800' : i.status === 'Sent' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800';
         html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-mono">'+i.id+'</td><td class="px-6 py-4 font-bold">'+i.client+'</td><td class="px-6 py-4 text-right">$'+i.amount.toLocaleString()+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+i.status+'</span></td><td class="px-6 py-4">'+i.due+'</td></tr>';
     });
@@ -977,8 +1070,10 @@ function renderInvoices() {
 }
 
 function renderTickets() {
-    let html = '';
-    ticketsData.forEach(t => {
+    const tbody = document.getElementById('tickets-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    ticketsData.forEach((t, idx) => {
         const statusClass = t.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
         html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-mono">'+t.id+'</td><td class="px-6 py-4">'+t.location+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+t.status+'</span></td><td class="px-6 py-4">'+t.expires+'</td></tr>';
     });
@@ -986,8 +1081,10 @@ function renderTickets() {
 }
 
 function renderChangeOrders() {
-    let html = '';
-    changeOrdersData.forEach(c => {
+    const tbody = document.getElementById('co-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    changeOrdersData.forEach((c, idx) => {
         const statusClass = c.status === 'Approved' ? 'bg-green-100 text-green-800' : c.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800';
         html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-bold">'+c.project+'</td><td class="px-6 py-4">'+c.desc+'</td><td class="px-6 py-4 text-right">$'+c.amount.toLocaleString()+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+c.status+'</span></td></tr>';
     });
@@ -995,8 +1092,10 @@ function renderChangeOrders() {
 }
 
 function renderSubs() {
-    let html = '';
-    subsData.forEach(s => {
+    const tbody = document.getElementById('subs-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    subsData.forEach((s, idx) => {
         const statusClass = s.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
         html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4 font-bold">'+s.company+'</td><td class="px-6 py-4">'+s.trade+'</td><td class="px-6 py-4">'+s.contact+'</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold '+statusClass+'">'+s.status+'</span></td></tr>';
     });
@@ -1004,8 +1103,10 @@ function renderSubs() {
 }
 
 function renderFieldReports() {
-    let html = '';
-    fieldReportsData.forEach(f => {
+    const tbody = document.getElementById('fr-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    fieldReportsData.forEach((f, idx) => {
         html += '<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="px-6 py-4">'+f.date+'</td><td class="px-6 py-4 font-bold">'+f.project+'</td><td class="px-6 py-4">'+f.crew+'</td><td class="px-6 py-4">'+f.hours+'</td><td class="px-6 py-4 text-sm">'+f.notes+'</td></tr>';
     });
     document.getElementById('fr-body').innerHTML = html;
