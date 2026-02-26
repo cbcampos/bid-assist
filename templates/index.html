@@ -64,7 +64,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BidAssist - Excavation Estimating</title>
+    <title>5B Contracting - Bid Management</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
@@ -529,7 +529,7 @@
         <!-- VIEW: TEAM -->
         <div id="view-team" class="fade-in hidden">
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                <div class="table-scroll"><table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Name</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Status</th></tr></thead><tbody class="text-sm"><tr><td class="px-6 py-4 font-bold">Ralph (Owner)</td><td class="px-6 py-4">Owner</td><td class="px-6 py-4">ralph@5bcontracting.com</td><td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-bold">Active</span></td></tr></tbody></table></div>
+                <div class="table-scroll"><table class="w-full text-left"><thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="px-6 py-4">Name</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Status</th></tr></thead><tbody class="text-sm"><tr><td class="px-6 py-4 font-bold">Lee (Owner)</td><td class="px-6 py-4">Owner</td><td class="px-6 py-4">lee@5bcontracting.com</td><td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-bold">Active</span></td></tr></tbody></table></div>
             </div>
         </div>
 
@@ -863,23 +863,24 @@ function loadBid(id) {
 
 // Leads Data
 const leadsData = [
-    {company:"Metro Properties",contact:"Tom Baker",source:"Referral",value:85000,status:"Hot"},
-    {company:"City of Montgomery",contact:"Sarah Wilson",source:"Bid List",value:120000,status:"Warm"},
-    {company:"Auburn University",contact:"Mike Brown",source:"Website",value:95000,status:"New"},
-    {company:"Alabama Power",contact:"Jane Smith",source:"Cold Call",value:200000,status:"Warm"}
+    {company:"East Alabama Developmental",contact:"Mark Edwards",source:"Referral",value:175000,status:"Hot"},
+    {company:"City of Prattville",contact:"Public Works",source:"Bid List",value:85000,status:"Warm"},
+    {company:"Troy University",contact:"Facilities Mgr",source:"Website",value:120000,status:"New"},
+    {company:"Elmore County Schools",contact:"Superintendent",source:"Cold Call",value:95000,status:"Warm"}
 ];
 
 // Invoices Data
 const invoicesData = [
-    {id:"INV-001",client:"Coleman Development",amount:87500,status:"Sent",due:"2026-03-15"},
-    {id:"INV-002",client:"Southern Homes",amount:142000,status:"Paid",due:"2026-02-28"},
-    {id:"INV-003",client:"Apex Development",amount:45000,status:"Draft",due:"2026-04-01"}
+    {id:"INV-001",client:"Apex Development",amount:87500,status:"Sent",due:"2026-03-15"},
+    {id:"INV-002",client:"Lee Properties",amount:142000,status:"Paid",due:"2026-02-28"},
+    {id:"INV-003",client:"City of Wetumpka",amount:45000,status:"Draft",due:"2026-04-01"}
 ];
 
 // 811 Tickets Data
 const ticketsData = [
-    {id:"811-2026-001",location:"2800 Eastdale Circle",status:"Active",expires:"2026-03-01"},
-    {id:"811-2026-002",location:"1500 Hillside Dr",status:"Complete",expires:"2026-02-15"}
+    {id:"811-2026-0156",location:"4500 Atlanta Hwy, Prattville",status:"Active",expires:"2026-03-01"},
+    {id:"811-2026-0157",location:"2200 River Rd, Wetumpka",status:"Active",expires:"2026-03-05"},
+    {id:"811-2026-0148",location:"8900 Commerce Way, Wetumpka",status:"Complete",expires:"2026-02-15"}
 ];
 
 // Change Orders Data
