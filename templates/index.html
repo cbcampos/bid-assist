@@ -369,24 +369,24 @@
                 <div class="flex items-center gap-4 text-sm">
                     <span class="text-gray-500">Select Bid:</span>
                 <select id="bid-selector" onchange="loadBid(this.value)" class="border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm font-medium">
-                    <option value="1">Highland Subdivision Phase 2</option>
-                    <option value="2">Eastdale Commons</option>
-                    <option value="3">VA Hospital</option>
-                    <option value="4">Downtown Mixed-Use</option>
+                    <option value="1">Prattville Shopping Center</option>
+                    <option value="2">Wetumpka Sewer Main Extension</option>
+                    <option value="3">Montgomery Storage Facility</option>
+                    <option value="4">Hillcrest Drive Residential</option>
                 </select>
                 <span class="text-gray-500 ml-4">Status:</span>
-                    <select class="border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm font-medium">
-                        <option>Draft</option>
-                        <option>Submitted</option>
-                        <option>Won</option>
-                        <option>Lost</option>
+                    <select id="bid-status" onchange="updateBidStatus(this.value)" class="border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm font-medium">
+                        <option value="Draft">Draft</option>
+                        <option value="Submitted">Submitted</option>
+                        <option value="Won">Won</option>
+                        <option value="Lost">Lost</option>
                     </select>
                 </div>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-gray-900 transition shadow-sm">
                         <i class="fa-regular fa-file-pdf mr-1"></i> Export PDF
                     </button>
-                    <button class="px-4 py-2 bg-brand text-dark font-bold rounded-lg text-sm hover:bg-brand-dark transition shadow-sm">
+                    <button onclick="emailBid()" class="px-4 py-2 bg-brand text-dark font-bold rounded-lg text-sm hover:bg-brand-dark transition shadow-sm">
                         <i class="fa-regular fa-paper-plane mr-1"></i> Email Bid
                     </button>
                 </div>
@@ -398,8 +398,14 @@
                     <div>
                         <h2 class="text-3xl font-bold text-gray-900 tracking-tight">BID PROPOSAL</h2>
                         <div class="mt-4 text-sm text-gray-600 leading-relaxed">
-                            <strong>5B Contracting</strong><br>123 Dirt Road Ave<br>Montgomery, AL 36104<br>(334) 555-0198
+                            <strong>5B Contracting LLC</strong><br>Montgomery, AL<br>(334) 868-4758<br>lee@5bcontracting.com
                         </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-500">Prepared For:</p>
+                        <p id="bid-client" class="text-lg font-bold text-gray-900">Client Name</p>
+                        <p id="bid-client-address" class="text-sm text-gray-600">Address</p>
+                        <p class="text-sm text-gray-500 mt-2">Date: <span id="bid-date"></span></p>
                     </div>
                 </div>
                 
@@ -838,6 +844,9 @@
         }
 
         // Bid data
+// Bid statuses
+let bidStatuses = {1: 'Draft', 2: 'Submitted', 3: 'Won', 4: 'Draft'};
+
 const bidsData = {
     1: { name: 'Highland Subdivision Phase 2', client: 'Apex Development', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 1500 },{ category: 'Excavation', desc: 'Cut to subgrade', qty: 1200, cost: 12.50 }]},
     2: { name: 'Eastdale Commons', client: 'Coleman Dev', items: [{ category: 'Mobilization', desc: 'Move in', qty: 1, cost: 2500 }]},
@@ -847,17 +856,62 @@ const bidsData = {
 
 function loadBid(id) {
     const bid = bidsData[id];
+    if (!bid) return;
+    
+    // Update subtitle
     document.getElementById('page-subtitle').innerText = 'Editing: ' + bid.name;
+    
+    // Update status dropdown
+    document.getElementById('bid-status').value = bid.status || 'Draft';
+    
+    // Update client info
+    document.getElementById('bid-client').innerText = bid.client;
+    const clientAddr = {1:'789 Commerce Way, Wetumpka',2:'100 City Hall Dr, Wetumpka',3:'8800 Atlanta Hwy, Montgomery',4:'200 Commerce St, Montgomery'};
+    document.getElementById('bid-client-address').innerText = clientAddr[bidId] || '';
+    document.getElementById('bid-date').innerText = new Date().toLocaleDateString();
+    
+    // Render line items
     let subtotal = 0;
     let html = '';
-    bid.items.forEach(item => {
+    bid.items.forEach((item, idx) => {
         const total = item.qty * item.cost;
         subtotal += total;
-        html += '<tr><td>'+item.category+'</td><td>'+item.desc+'</td><td class="text-center">'+item.qty+'</td><td class="text-right">$'+item.cost.toFixed(2)+'</td><td class="text-right font-medium">$'+total.toLocaleString()+'</td></tr>';
+        html += '<tr class="border-b border-gray-100 hover:bg-gray-50" data-idx="'+idx+'">';
+        html += '<td class="p-3">'+item.category+'</td>';
+        html += '<td class="p-3">'+item.desc+'</td>';
+        html += '<td class="p-3 text-center">'+item.qty+'</td>';
+        html += '<td class="p-3 text-right">$'+item.cost.toFixed(2)+'</td>';
+        html += '<td class="p-3 text-right font-medium">$'+total.toLocaleString()+'</td>';
+        html += '</tr>';
     });
     document.getElementById('line-items-body').innerHTML = html;
+    
+    // Update totals
+    const tax = subtotal * 0.0; // No tax on excavation
     document.getElementById('subtotal-val').innerText = '$'+subtotal.toLocaleString();
-    document.getElementById('grand-total-val').innerText = '$'+(subtotal*1.15).toLocaleString();
+    document.getElementById('grand-total-val').innerText = '$'+(subtotal + tax).toLocaleString();
+}
+
+function updateBidStatus(status) {
+    const bidId = document.getElementById('bid-selector').value;
+    bidsData[bidId].status = status;
+    // Show feedback
+    const btn = document.querySelector('#bid-status');
+    btn.classList.add('bg-green-100');
+    setTimeout(() => btn.classList.remove('bg-green-100'), 500);
+}
+
+function emailBid() {
+    const bidId = document.getElementById('bid-selector');
+    const bidName = bidId.options[bidId.selectedIndex].text;
+    alert('📧 Opening email client to send bid: ' + bidName + '\n\nTo: ' + (bidsData[bidId.value].client || 'client@email.com'));
+    window.location.href = 'mailto:?subject=Bid Proposal - ' + encodeURIComponent(bidName) + '&body=Please find attached our bid proposal.';
+}
+
+function addLineItem() {
+    const bidId = document.getElementById('bid-selector').value;
+    bidsData[bidId].items.push({category: 'New Item', desc: 'Description', qty: 1, cost: 0});
+    loadBid(bidId);
 }
 
 
